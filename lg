@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+
+import random
+
+roles = ["Loup-garou", "Loup-garou", "Voyante", "Sorcière", "Simple Villageois", "Chasseur", "Petite fille", "Cupidon", "Simple villageois", "Ancien"]
+liste_j = []
+joueurs = {}
+
+saisie_joueurs = True
+name = ""
+
+def random_roles(liste):
+    global roles
+    global joueurs
+
+    role_lg = roles.copy()
+    for i in liste:
+        choisi = random.choice(role_lg)
+        joueurs[i] = choisi
+        del role_lg[role_lg.index(choisi)]
+
+
+while saisie_joueurs:
+    name = input("Entrez le nom du joueur: ")
+    if name == "":
+        saisie_joueurs = False
+    else:
+        liste_j.append(name)
+
+random_roles(liste_j)
+print(joueurs)
