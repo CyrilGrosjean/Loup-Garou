@@ -2,7 +2,7 @@
 
 import random
 
-roles = ["Loup-garou", "Loup-garou", "Voyante", "Sorcière", "Simple Villageois", "Chasseur", "Petite fille", "Cupidon", "Simple villageois", "Ancien"]
+roles = ["Loup-garou", "Voyante", "Sorcière", "Simple Villageois", "Chasseur", "Petite fille", "Cupidon", "Simple villageois", "Ancien"]
 liste_j = []
 joueurs = {}
 
@@ -13,6 +13,9 @@ def random_roles(liste):
     global roles
     global joueurs
 
+    player = random.choice(liste)
+    joueurs[player] = "Loup-garou"
+    del liste[liste.index(player)]
     role_lg = roles.copy()
     for i in liste:
         choisi = random.choice(role_lg)
