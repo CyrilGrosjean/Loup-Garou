@@ -1,34 +1,19 @@
 #!/usr/bin/env python3
 
 import random
+from tkinter import *
 
-roles = ["Loup-garou", "Voyante", "Sorcière", "Simple Villageois", "Chasseur", "Petite fille", "Cupidon", "Simple villageois", "Ancien"]
-liste_j = []
-joueurs = {}
+# -- GLOBAL VARIABLES -- #
 
-saisie_joueurs = True
-name = ""
+roles = {"Loup Garou": 1, "Simple villageois": 1, "Voyante": 1, "Chasseur": 1, "Cupidon": 1, "Sorcière": 1, "Petite fille": 1, "Voleur": 1, "Salvateur": 1, "Idiot du village": 1, "Bouc émissaire": 1, "Ancien": 1, "Joueur de flûte": 1, "Corbeau": 1, "Enfant sauvage": 1, "Renard": 1, "Soeur": 2, "Montreur d'ours": 1, "Chien loup": 1}
 
-def random_roles(liste):
-    global roles
-    global joueurs
+roles = []
 
-    player = random.choice(liste)
-    joueurs[player] = "Loup-garou"
-    del liste[liste.index(player)]
-    role_lg = roles.copy()
-    for i in liste:
-        choisi = random.choice(role_lg)
-        joueurs[i] = choisi
-        del role_lg[role_lg.index(choisi)]
+class Game(object):
 
+    player_list = []
 
-while saisie_joueurs:
-    name = input("Entrez le nom du joueur: ")
-    if name == "":
-        saisie_joueurs = False
-    else:
-        liste_j.append(name)
+    def __init__(self):
+        pass
 
-random_roles(liste_j)
-print(joueurs)
+Game()
