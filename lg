@@ -14,11 +14,15 @@ roles = {"Loup Garou": True, "Loup Garou blanc": True, "Grand méchant loup": Fa
 class Game(object):
 
     player_list = []
+    player_roles = {}
+    game_info = {"Couple": [], "Loups": [], "Enchantés": [], "Maitre": "NULL", "Modèle": "NULL", "Protected": "NULL", "Soeurs": []}
+
     fenetre = 0
 
     window = Tk()
     font_title = Font(root=window, family="Times", size=24, weight="bold", slant="italic")
     font_copyright = Font(root=window, family="Times", size=8, slant="italic")
+    font_options = Font(root=window, family="Times", size=15, slant="italic")
 
     def __init__(self):
         self.window.title("Loup Garou 1.0")
@@ -61,7 +65,34 @@ class Game(object):
         del compo_list[compo_list.index("Loup Garou")]
         title = Label(self.window, text="Loup Garou", font=self.font_title, fg="red")
 
+        self.select_roles_var = StringVar()
+        self.select_roles_var.set("Loup Garou blanc")
+        select_roles = OptionMenu(self.window, self.select_roles_var, *compo_list, command=self.toggle_label_func)
+        toggle_button = Button(self.window, text="Activer / Désactiver", command=self.toggle_role)
+        self.toggle_label = Label(self.window, text="Activé", fg="green", font=self.font_options)
+
         title.place(x=520, y=10)
+        select_roles.place(x=50, y=100, width=300, height=40)
+        self.toggle_label.place(x=150, y=150)
+        toggle_button.place(x=360, y=100, width=200, height=40)
+
+    def toggle_role(self):
+        global roles
+
+        if roles.get(self.select_roles_var.get()):
+            self.toggle_label.config(text="Désactivé", fg="red")
+            roles[self.select_roles_var.get()] = False
+        else:
+            self.toggle_label.config(text="Activé", fg="green")
+            roles[self.select_roles_var.get()] = True
+
+    def toggle_label_func(self, event):
+        global roles
+
+        if roles.get(self.select_roles_var.get()):
+            self.toggle_label.config(text="Activé", fg="green")
+        else:
+            self.toggle_label.config(text="Désactivé", fg="red")
 
 
 Game()
