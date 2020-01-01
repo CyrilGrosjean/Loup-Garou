@@ -65,16 +65,40 @@ class Game(object):
         del compo_list[compo_list.index("Loup Garou")]
         title = Label(self.window, text="Loup Garou", font=self.font_title, fg="red")
 
+        # - Activer / Désactiver rôles
+
         self.select_roles_var = StringVar()
         self.select_roles_var.set("Loup Garou blanc")
         select_roles = OptionMenu(self.window, self.select_roles_var, *compo_list, command=self.toggle_label_func)
         toggle_button = Button(self.window, text="Activer / Désactiver", command=self.toggle_role)
         self.toggle_label = Label(self.window, text="Activé", fg="green", font=self.font_options)
 
+        # - Voyante bavarde ou non + chances de bavardage
+
+        self.voy_bavarde_var = IntVar()
+        self.voy_bavarde_var.set(0)
+        voy_bavarde = Checkbutton(self.window, text="Voyante bavarde", variable=self.voy_bavarde_var)
+        luck_bavar_label = Label(self.window, text="Chances de bavardage (en %)")
+        self.luck_bavar = Spinbox(self.window, from_=0, to=100)
+
+        # - Type de couple
+
+        self.couple_var = StringVar()
+        self.couple_var.set("Couple classique")
+        couple = OptionMenu(self.window, self.couple_var, "Couple classique", "Couple composé du cupidon", "Couple aléatoire", "Pas de couple")
+        couple_label = Label(self.window, text="Type de couple")
+
+        # -
+
         title.place(x=520, y=10)
         select_roles.place(x=50, y=100, width=300, height=40)
         self.toggle_label.place(x=150, y=150)
         toggle_button.place(x=360, y=100, width=200, height=40)
+        voy_bavarde.place(x=600, y=110)
+        luck_bavar_label.place(x=800, y=100)
+        self.luck_bavar.place(x=800, y=125)
+        couple_label.place(x=150, y=200)
+        couple.place(x=50, y=230, width=300, height=40)
 
     def toggle_role(self):
         global roles
