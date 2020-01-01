@@ -2,18 +2,52 @@
 
 import random
 from tkinter import *
+import pygame
+from tkinter.font import *
 
 # -- GLOBAL VARIABLES -- #
 
 roles = {"Loup Garou": 1, "Simple villageois": 1, "Voyante": 1, "Chasseur": 1, "Cupidon": 1, "Sorcière": 1, "Petite fille": 1, "Voleur": 1, "Salvateur": 1, "Idiot du village": 1, "Bouc émissaire": 1, "Ancien": 1, "Joueur de flûte": 1, "Corbeau": 1, "Enfant sauvage": 1, "Renard": 1, "Soeur": 2, "Montreur d'ours": 1, "Chien loup": 1}
 
-roles = []
+# ---------------------- #
 
 class Game(object):
 
     player_list = []
+    fenetre = 0
+
+    window = Tk()
+    font_title = Font(root=window, family="Times", size=24, weight="bold", slant="italic")
+    font_copyright = Font(root=window, family="Times", size=8, slant="italic")
 
     def __init__(self):
+        self.window.title("Loup Garou 1.0")
+        self.window.geometry("1200x800+150+150")
+        self.window.resizable(0, 0)
+
+        self.main_menu()
+
+        self.window.mainloop()
+
+    def main_menu(self):
+        for c in self.window.winfo_children():
+            c.destroy()
+        title = Label(self.window, text="Loup Garou", font=self.font_title, fg="red")
+        launch = Button(self.window, text="Jouer", command=self.play_menu)
+        options = Button(self.window, text="Options", command=self.options_menu)
+        leave = Button(self.window, text="Quitter", command=self.window.destroy)
+        cpyright = Label(self.window, text="© 2019 Cyril Grosjean", font=self.font_copyright, fg="grey")
+
+        title.place(x=520, y=10)
+        launch.place(x=420, y=200, width=400, height=40)
+        options.place(x=420, y=300, width=400, height=40)
+        leave.place(x=420, y=400, width=400, height=40)
+        cpyright.place(x=5, y=780)
+
+    def play_menu(self):
+        pass
+
+    def options_menu(self):
         pass
 
 Game()
