@@ -35,3 +35,16 @@ Voici les rôles présents dans le jeu:
 - Soeurs
 - Montreur d'ours
 - Chien loup
+- Chevalier à l'épée rouillée
+
+# Avantages du programme:
+
+Tout est automatisé et permet au maître du jeu une aide supplémentaire avec des sons d'ambiances.
+Le programme place aléatoirement les joueurs dans la salle (cela permet que le montreur d'ours grogne correctement et que le chevalier à l'épée rouillée tue le bon loup garou)
+Le programme détecte le camp gagnant et termine le jeu automatiquement.
+
+# Idées d'ajout futur
+- Possibilité d'avoir des configurations préfaites
+- Possibilité d'enregistrer et charger ses propres configurations
+- Ajouter de nouveaux rôles
+- Système de boutique pour débloquer au fur et à mesure des nouveaux rôles dans le jeu (boutique avec argent virtuel -> entièrement gratuite)

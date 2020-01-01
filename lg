@@ -7,7 +7,7 @@ from tkinter.font import *
 
 # -- GLOBAL VARIABLES -- #
 
-roles = {"Loup Garou": 1, "Simple villageois": 1, "Voyante": 1, "Chasseur": 1, "Cupidon": 1, "Sorcière": 1, "Petite fille": 1, "Voleur": 1, "Salvateur": 1, "Idiot du village": 1, "Bouc émissaire": 1, "Ancien": 1, "Joueur de flûte": 1, "Corbeau": 1, "Enfant sauvage": 1, "Renard": 1, "Soeur": 2, "Montreur d'ours": 1, "Chien loup": 1}
+roles = {"Loup Garou": True, "Loup Garou blanc": True, "Grand méchant loup": False, "Infect père des loups": True, "Loup amnésique": True, "Simple villageois": True, "Voyante": True, "Chasseur": True, "Cupidon": True, "Sorcière": True, "Petite fille": True, "Voleur": True, "Salvateur": True, "Idiot du village": True, "Bouc émissaire": True, "Ancien": True, "Joueur de flûte": True, "Corbeau": True, "Enfant sauvage": True, "Renard": True, "Soeur": True, "Montreur d'ours": True, "Chien loup": True, "Chevalier à l'épée rouillée": True}
 
 # ---------------------- #
 
@@ -32,6 +32,7 @@ class Game(object):
     def main_menu(self):
         for c in self.window.winfo_children():
             c.destroy()
+
         title = Label(self.window, text="Loup Garou", font=self.font_title, fg="red")
         launch = Button(self.window, text="Jouer", command=self.play_menu)
         options = Button(self.window, text="Options", command=self.options_menu)
@@ -48,6 +49,19 @@ class Game(object):
         pass
 
     def options_menu(self):
-        pass
+        global roles
+
+        for c in self.window.winfo_children():
+            c.destroy()
+
+        compo_list = []
+        for i in roles.keys():
+            compo_list.append(i)
+        del compo_list[compo_list.index("Simple villageois")]
+        del compo_list[compo_list.index("Loup Garou")]
+        title = Label(self.window, text="Loup Garou", font=self.font_title, fg="red")
+
+        title.place(x=520, y=10)
+
 
 Game()
