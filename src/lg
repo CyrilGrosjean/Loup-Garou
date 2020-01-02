@@ -88,7 +88,13 @@ class Game(object):
         couple = OptionMenu(self.window, self.couple_var, "Couple classique", "Couple composé du cupidon", "Couple aléatoire", "Pas de couple")
         couple_label = Label(self.window, text="Type de couple")
 
-        # -
+        # - Taux de réveil du LGB
+
+        lgb_label = Label(self.window, text="Réveil du Loup Garou Blanc")
+        self.taux_lgb = Spinbox(self.window, from_=1, to=5, command=self.toggle_lgb_taux)
+        self.lgb_label1 = Label(self.window, text="Toutes les 1 nuit(s)")
+
+        # - 
 
         title.place(x=520, y=10)
         select_roles.place(x=50, y=100, width=300, height=40)
@@ -99,6 +105,12 @@ class Game(object):
         self.luck_bavar.place(x=800, y=125)
         couple_label.place(x=150, y=200)
         couple.place(x=50, y=230, width=300, height=40)
+        lgb_label.place(x=450, y=200)
+        self.taux_lgb.place(x=450, y=230)
+        self.lgb_label1.place(x=470, y=260)
+
+    def toggle_lgb_taux(self):
+        self.lgb_label1.config(text="Toutes les " + str(self.taux_lgb.get()) + " nuit(s)")
 
     def toggle_role(self):
         global roles
