@@ -94,7 +94,42 @@ class Game(object):
         self.taux_lgb = Spinbox(self.window, from_=1, to=5, command=self.toggle_lgb_taux)
         self.lgb_label1 = Label(self.window, text="Toutes les 1 nuit(s)")
 
-        # - 
+        # - Taux de réveil de l'assassin
+
+        assassin_label = Label(self.window, text="Réveil de l'assassin")
+        self.taux_assassin = Spinbox(self.window, from_=1, to=5, command=self.toggle_assassin_taux)
+        self.assassin_label1 = Label(self.window, text="Toutes les 1 nuit(s)")
+
+        # - Options sorcière
+
+        self.witch_kill_var = IntVar()
+        self.witch_kill_var.set(0)
+        witch_kill_time = Checkbutton(self.window, text="La sorcière ne peut pas tuer la première nuit", variable=self.witch_kill_var)
+        self.witch_raise_var = IntVar()
+        self.witch_raise_var.set(0)
+        witch_raise_time = Checkbutton(self.window, text="La sorcière ne peut pas réanimer la première nuit", variable=self.witch_raise_var)
+
+        # - Options joueur de flûte
+
+        enchant_label = Label(self.window, text="Nombre de joueurs à enchanter par nuit")
+        self.nb_enchant = Spinbox(self.window, from_=1, to=5, command=self.toggle_jdf_taux)
+        self.nb_enchant_label = Label(self.window, text="1 joueur(s) enchanté(s) par nuit")
+
+        # - Options ange
+
+        self.ange_label = Label(self.window, text="L'ange peut gagner si voté avant le jour 1")
+        self.ange_spin = Spinbox(self.window, from_=1, to=3, command=self.toggle_ange_taux)
+
+        # - Compo cachée
+
+        self.compo_var = IntVar()
+        self.compo_var.set(0)
+        compo_check = Checkbutton(self.window, text="Composition cachée", variable=self.compo_var)
+
+        # - END
+
+        save = Button(self.window, text="Enregistrer et fermer", command=self.main_menu)
+        back = Button(self.window, text="Retour", command=self.main_menu)
 
         title.place(x=520, y=10)
         select_roles.place(x=50, y=100, width=300, height=40)
@@ -108,6 +143,28 @@ class Game(object):
         lgb_label.place(x=450, y=200)
         self.taux_lgb.place(x=450, y=230)
         self.lgb_label1.place(x=470, y=260)
+        assassin_label.place(x=770, y=200)
+        self.taux_assassin.place(x=750, y=230)
+        self.assassin_label1.place(x=770, y=260)
+        witch_kill_time.place(x=50, y=340)
+        witch_raise_time.place(x=50, y=370)
+        enchant_label.place(x=460, y=320)
+        self.nb_enchant.place(x=500, y=350)
+        self.nb_enchant_label.place(x=480, y=380)
+        self.ange_label.place(x=800, y=320)
+        self.ange_spin.place(x=840, y=350)
+        compo_check.place(x=490, y=430)
+        save.place(x=380, y=550, width=400, height=40)
+        back.place(x=380, y=600, width=400, height=40)
+
+    def toggle_ange_taux(self):
+        self.ange_label.config(text="L'ange peut gagner si voté avant le jour " + str(self.ange_spin.get()))
+
+    def toggle_jdf_taux(self):
+        self.nb_enchant_label.config(text=str(self.nb_enchant.get()) + " joueur(s) enchanté(s) par nuit")
+
+    def toggle_assassin_taux(self):
+        self.assassin_label1.config(text="Toutes les " + str(self.taux_assassin.get()) + " nuit(s)")
 
     def toggle_lgb_taux(self):
         self.lgb_label1.config(text="Toutes les " + str(self.taux_lgb.get()) + " nuit(s)")
