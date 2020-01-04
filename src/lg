@@ -16,8 +16,8 @@ class Game(object):
 
     player_list = []
     player_roles = {}
-    game_info = {"Couple": [], "Loups": [], "Enchantés": [], "Maitre": "NULL", "Modèle": "NULL", "Protected": "NULL", "Soeurs": []}
-    game_options = {"VoyanteBavarde":False, "VoyanteBavardePer":0, "Couple":"Couple classique", "Taux LGB":1, "TauxAssassin":1, "SorcièreNoKill":False, "SorcièreNoRaise":False, "JDFenchant":1, "WinAnge":1, "CompoCachée":False}
+    game_info = {"Couple": [], "Loups": [], "Enchantés": [], "Maitre": "NULL", "Modèle": "NULL", "Protected": "NULL", "Soeurs": [], "Maire": "NULL"}
+    game_options = {"VoyanteBavarde":False, "VoyanteBavardePer":0, "Couple":"Couple classique", "Taux LGB":1, "TauxAssassin":1, "SorcièreNoKill":False, "SorcièreNoRaise":False, "JDFenchant":1, "WinAnge":1, "CompoCachée":False, "Election":True}
 
     fenetre = 0
 
@@ -52,7 +52,12 @@ class Game(object):
         cpyright.place(x=5, y=780)
 
     def play_menu(self):
-        pass
+        for c in self.window.winfo_children():
+            c.destroy()
+
+        self.liste = Listbox(self.window)
+
+        self.liste.place(x=50, y=300)
 
     def options_menu(self):
         global roles
@@ -128,6 +133,12 @@ class Game(object):
         self.compo_var.set(0)
         compo_check = Checkbutton(self.window, text="Composition cachée", variable=self.compo_var)
 
+        # - Election maire
+
+        self.maire_var = IntVar()
+        self.maire_var.set(1)
+        maire = Checkbutton(self.window, text="Election d'un maire", variable=self.maire_var)
+
         # - END
 
         save = Button(self.window, text="Enregistrer et fermer", command=self.save_options)
@@ -156,6 +167,7 @@ class Game(object):
         self.ange_label.place(x=800, y=320)
         self.ange_spin.place(x=840, y=350)
         compo_check.place(x=490, y=430)
+        maire.place(x=800, y=430)
         save.place(x=380, y=550, width=400, height=40)
         back.place(x=380, y=600, width=400, height=40)
 
@@ -174,6 +186,7 @@ class Game(object):
         nb_enchants = int(self.nb_enchant.get())
         ange = int(self.ange_spin.get())
         compo = int(self.compo_var.get())
+        maire = int(self.maire_var.get())
 
         # - CHECK VARIABLES
 
@@ -183,7 +196,7 @@ class Game(object):
             var_good = False
         elif witch_raise < 0 or witch_raise > 1 or nb_enchants < 1 or nb_enchants > 5:
             var_good = False
-        elif ange < 1 or ange > 3 or compo < 0 or compo > 1:
+        elif ange < 1 or ange > 3 or compo < 0 or compo > 1 or maire != 0 and maire != 1:
             var_good = False
 
         if not var_good:
@@ -209,6 +222,7 @@ class Game(object):
             del self.ange_label
             del self.ange_spin
             del self.compo_var
+            del self.maire_var
 
         # - SET
 
@@ -234,6 +248,10 @@ class Game(object):
                 self.game_options["CompoCachée"] = True
             else:
                 self.game_options["CompoCachée"] = False
+            if maire == 1:
+                self.game_options["Election"] = True
+            else:
+                self.game_options["Election"] = False
 
             showinfo("Loup Garou", "Les paramètres ont bien été sauvegardés !")
             self.main_menu()
