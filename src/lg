@@ -4,6 +4,7 @@ import random
 from tkinter import *
 import pygame
 from tkinter.font import *
+from tkinter.messagebox import *
 
 # -- GLOBAL VARIABLES -- #
 
@@ -16,6 +17,7 @@ class Game(object):
     player_list = []
     player_roles = {}
     game_info = {"Couple": [], "Loups": [], "Enchantés": [], "Maitre": "NULL", "Modèle": "NULL", "Protected": "NULL", "Soeurs": []}
+    game_options = {"VoyanteBavarde":False, "VoyanteBavardePer":0, "Couple":"Couple classique", "Taux LGB":1, "TauxAssassin":1, "SorcièreNoKill":False, "SorcièreNoRaise":False, "JDFenchant":1, "WinAnge":1, "CompoCachée":False}
 
     fenetre = 0
 
@@ -128,7 +130,7 @@ class Game(object):
 
         # - END
 
-        save = Button(self.window, text="Enregistrer et fermer", command=self.main_menu)
+        save = Button(self.window, text="Enregistrer et fermer", command=self.save_options)
         back = Button(self.window, text="Retour", command=self.main_menu)
 
         title.place(x=520, y=10)
@@ -156,6 +158,85 @@ class Game(object):
         compo_check.place(x=490, y=430)
         save.place(x=380, y=550, width=400, height=40)
         back.place(x=380, y=600, width=400, height=40)
+
+    def save_options(self):
+        # - GET VARIABLES
+
+        var_good = True
+
+        voy_bav = self.voy_bavarde_var.get()
+        luck_voy = int(self.luck_bavar.get())
+        couple = self.couple_var.get()
+        lgb = int(self.taux_lgb.get())
+        assassin = int(self.taux_assassin.get())
+        witch_kill = int(self.witch_kill_var.get())
+        witch_raise = int(self.witch_raise_var.get())
+        nb_enchants = int(self.nb_enchant.get())
+        ange = int(self.ange_spin.get())
+        compo = int(self.compo_var.get())
+
+        # - CHECK VARIABLES
+
+        if voy_bav < 0 or voy_bav > 1 or luck_voy < 0 or luck_voy > 100:
+            var_good = False
+        elif lgb < 1 or lgb > 5 or assassin < 1 or assassin > 5 or witch_kill < 0 or witch_kill > 1:
+            var_good = False
+        elif witch_raise < 0 or witch_raise > 1 or nb_enchants < 1 or nb_enchants > 5:
+            var_good = False
+        elif ange < 1 or ange > 3 or compo < 0 or compo > 1:
+            var_good = False
+
+        if not var_good:
+            showerror("Loup Garou", "Les paramètres entrés sont incorrects !")
+            self.options_menu()
+        else:
+
+        # - DEL GLOBAL VARIABLES
+
+            del self.voy_bavarde_var
+            del self.select_roles_var
+            del self.toggle_label
+            del self.luck_bavar
+            del self.couple_var
+            del self.taux_lgb
+            del self.lgb_label1
+            del self.taux_assassin
+            del self.assassin_label1
+            del self.witch_kill_var
+            del self.witch_raise_var
+            del self.nb_enchant
+            del self.nb_enchant_label
+            del self.ange_label
+            del self.ange_spin
+            del self.compo_var
+
+        # - SET
+
+            if voy_bav == 1:
+                self.game_options["VoyanteBavarde"] = True
+            else:
+                self.game_options["VoyanteBavarde"] = False
+            self.game_options["VoyanteBavardePer"] = luck_voy
+            self.game_options["Couple"] = couple
+            self.game_options["Taux LGB"] = lgb
+            self.game_options["TauxAssassin"] = assassin
+            if witch_kill == 1:
+                self.game_options["SorcièreNoKill"] = True
+            else:
+                self.game_options["SorcièreNoKill"] = False
+            if witch_raise == 1:
+                self.game_options["SorcièreNoRaise"] = True
+            else:
+                self.game_options["SorcièreNoRaise"] = False
+            self.game_options["JDFenchant"] = nb_enchants
+            self.game_options["WinAnge"] = ange
+            if compo == 1:
+                self.game_options["CompoCachée"] = True
+            else:
+                self.game_options["CompoCachée"] = False
+
+            showinfo("Loup Garou", "Les paramètres ont bien été sauvegardés !")
+            self.main_menu()
 
     def toggle_ange_taux(self):
         self.ange_label.config(text="L'ange peut gagner si voté avant le jour " + str(self.ange_spin.get()))
