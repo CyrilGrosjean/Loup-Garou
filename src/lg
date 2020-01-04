@@ -38,6 +38,8 @@ class Game(object):
     def main_menu(self):
         for c in self.window.winfo_children():
             c.destroy()
+        if (len(self.player_list) != 0):
+            self.player_list.clear()
 
         title = Label(self.window, text="Loup Garou", font=self.font_title, fg="red")
         launch = Button(self.window, text="Jouer", command=self.play_menu)
@@ -55,9 +57,115 @@ class Game(object):
         for c in self.window.winfo_children():
             c.destroy()
 
+        title = Label(self.window, text="Loup Garou", font=self.font_title, fg="red")
+        self.player_entry = Entry(self.window)
+        self.player_entry.bind("<Return>", self.add_player)
+        add_player_button = Button(self.window, text="Ajouter ce joueur", command=self.add_player)
+        rem_player_button = Button(self.window, text="Supprimer ce joueur", command=self.del_player)
+        self.wolves_var = StringVar()
+        self.wolves_var.set(1)
+        wolves_spin = Spinbox(self.window, textvariable=self.wolves_var, from_=1, to=8)
+        wolves_label = Label(self.window, text="Nombre de loups")
+        launch_button = Button(self.window, text="Commencer", command=self.start_game)
+        back = Button(self.window, text="Retour", command=self.main_menu)
         self.liste = Listbox(self.window)
 
-        self.liste.place(x=50, y=300)
+        title.place(x=520, y=10)
+        self.liste.place(x=50, y=250)
+        self.player_entry.place(x=490, y=100, width=200, height=30)
+        add_player_button.place(x=490, y=150, width=200, height=40)
+        rem_player_button.place(x=490, y=200, width=200, height=40)
+        launch_button.place(x=490, y=400, width=200, height=40)
+        wolves_label.place(x=830, y=170)
+        wolves_spin.place(x=800, y=200)
+        back.place(x=490, y=450, width=200, height=40)
+
+    def start_game(self):
+        global roles
+
+        # - Variables
+
+        nb_wolf = int(self.wolves_var.get())
+        roles_lg = []
+        roles_vi = []
+        liste_joueurs = self.player_list.copy()
+
+        # Checking players
+
+        if len(liste_joueurs) < 5 or int(self.wolves_var.get()) > 8 or int(self.wolves_var.get()) < 1:
+            showinfo("Loup Garou", "Il faut au moins 6 joueurs pour démarrer une partie.")
+            self.play_menu()
+            return None
+
+        # - Copy roles
+
+        for r in roles.keys():
+            if roles.get(r):
+                if "loup" in r or "Loup" in r:
+                    if r != "Chien loup":
+                        roles_lg.append(r)
+                    else:
+                        roles_vi.append(r)
+                else:
+                    roles_vi.append(r)
+
+        if len(roles_lg) < nb_wolf:
+            while len(roles_lg) < nb_wolf:
+                roles_lg.append("Loup Garou")
+        if len(roles_vi) < len(liste_joueurs) - nb_wolf:
+            while len(roles_vi) < len(liste_joueurs) - nb_wolf:
+                roles_vi.append("Simple villageois")
+
+        # - Attribution des roles
+
+        while len(liste_joueurs) > 0:
+            player = random.choice(liste_joueurs)
+            del liste_joueurs[liste_joueurs.index(player)]
+
+            if nb_wolf > 0:
+                role = random.choice(roles_lg)
+                del roles_lg[roles_lg.index(role)]
+                self.player_roles[player] = role
+                nb_wolf -= 1
+            else:
+                role = random.choice(roles_vi)
+                del roles_vi[roles_vi.index(role)]
+                if role == "Soeur" and len(liste_joueurs) > 0:
+                    self.player_roles[player] = role
+                    player = random.choice(liste_joueurs)
+                    del liste_joueurs[liste_joueurs.index(player)]
+                    self.player_roles[player] = role
+                else:
+                    role = random.choice(roles_vi)
+                    del roles_vi[roles_vi.index(role)]
+                    self.player_roles[player] = role
+
+        print(self.player_roles)
+
+
+    def add_player(self, event=0):
+        name = self.player_entry.get()
+        if name not in " ":
+            self.player_entry.delete(0, END)
+            self.player_list.append(name)
+            self.liste.insert(END, name)
+        nb = len(self.player_list) // 4
+        if (nb == 0):
+            nb += 1
+        self.wolves_var.set(str(nb))
+
+    def del_player(self):
+        select = self.liste.curselection()
+        try:
+            name = self.liste.get(select)
+            del self.player_list[self.player_list.index(name)]
+            self.liste.delete(select)
+        except:
+            pass
+        nb = len(self.player_list) // 4
+        if (nb == 0):
+            nb += 1
+        self.wolves_var.set(str(nb))
 
     def options_menu(self):
         global roles
