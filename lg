@@ -16,7 +16,7 @@ class Game(object):
 
     player_list = []
     player_roles = {}
-    game_info = {"Couple": [], "Loups": [], "Enchantés": [], "Maitre": "NULL", "Modèle": "NULL", "Protected": "NULL", "Soeurs": [], "Maire": "NULL"}
+    game_info = {"Nuit": 1, "Couple": [], "Loups": [], "Enchantés": [], "Maitre": "NULL", "Modèle": "NULL", "Protected": "NULL", "Soeurs": [], "Maire": "NULL"}
     game_options = {"VoyanteBavarde":False, "VoyanteBavardePer":0, "Couple":"Couple classique", "Taux LGB":1, "TauxAssassin":1, "SorcièreNoKill":False, "SorcièreNoRaise":False, "JDFenchant":1, "WinAnge":1, "CompoCachée":False, "Election":True}
 
     fenetre = 0
@@ -25,6 +25,7 @@ class Game(object):
     font_title = Font(root=window, family="Times", size=24, weight="bold", slant="italic")
     font_copyright = Font(root=window, family="Times", size=8, slant="italic")
     font_options = Font(root=window, family="Times", size=15, slant="italic")
+    font_desc = Font(root=window, family="data/font/werewolf.ttf", size=15)
 
     def __init__(self):
         self.window.title("Loup Garou 1.0")
@@ -126,22 +127,65 @@ class Game(object):
                 role = random.choice(roles_lg)
                 del roles_lg[roles_lg.index(role)]
                 self.player_roles[player] = role
+                self.game_info["Loups"].append(player)
                 nb_wolf -= 1
             else:
                 role = random.choice(roles_vi)
                 del roles_vi[roles_vi.index(role)]
-                if role == "Soeur" and len(liste_joueurs) > 0:
+                if "Soeur" in role and len(liste_joueurs) > 0:
                     self.player_roles[player] = role
                     player = random.choice(liste_joueurs)
                     del liste_joueurs[liste_joueurs.index(player)]
                     self.player_roles[player] = role
-                else:
+                elif "Soeur" in role and len(liste_joueurs) == 0:
                     role = random.choice(roles_vi)
                     del roles_vi[roles_vi.index(role)]
                     self.player_roles[player] = role
+                else:
+                    self.player_roles[player] = role
 
-        print(self.player_roles)
+        # - Starting...
 
+            self.launch()
+
+    def launch(self):
+        for c in self.window.winfo_children():
+            c.destroy()
+
+        self.start = True
+        title = Label(self.window, text="Loup Garou", font=self.font_title, fg="red")
+        self.text_info = Label(self.window, text="Merci de placer les joueurs de gauche à droite\nen fonction de l'ordre dont ils sont appelés pour les rôles.", font=self.font_desc)
+        next_button = Button(self.window, text=">>", command=self.next)
+        self.alive_players = Listbox(self.window)
+        self.fill_listbox()
+
+        title.place(x=520, y=10)
+        self.text_info.place(x=340, y=200)
+        next_button.place(x=450, y=500, width=300, height=30)
+        self.alive_players.place(x=50, y=200, width=260, height=300)
+
+    def next(self):
+        if self.start:
+            if self.fenetre < len(self.player_list):
+                name = self.player_list[self.fenetre]
+                role = self.player_roles.get(name)
+                self.text_info.config(text="Joueur: " + str(name) + "\nRole: " + str(role))
+                self.fenetre += 1
+            else:
+                self.text_info.config(text="Vérifiez que tous les joueurs soient installés...\nC'est parti !")
+                self.start = False
+                self.fenetre = 0
+        else:
+            if self.fenetre == 0:
+                self.text_info.config(text="La nuit " + str(self.game_info.get("Nuit")) + " se lève !")
+                self.fenetre += 1
+            if self.fenetre == 1:
+                pass
+
+    def fill_listbox(self):
+        for i in self.player_list:
+            name = str(i) + " - " + str(self.player_roles.get(i))
+            self.alive_players.insert(END, name)
 
     def add_player(self, event=0):
         name = self.player_entry.get()
