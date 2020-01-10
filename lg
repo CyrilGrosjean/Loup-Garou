@@ -334,9 +334,24 @@ class Game(object):
             elif self.fenetre == 12:
                 if self.player_select.get() != "Personne":
                     self.game_info["Modèle"] = self.player_select.get()
+                self.player_select.set("Personne")
                 self.text_info.config(text="L'enfant sauvage se rendort !")
                 self.fenetre += 1
             elif self.fenetre == 13:
+                if "Chien loup" in self.ingame_roles:
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Chien loup":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                    self.text_info.config(text="Le chien loup se réveille ! (" + str(player) + ")\n\nIl désigne un maître pour cette nuit. Si le maître ne nourrit pas le chien,\nil sera transformé en loup garou.")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 2
+                    self.next()
+            elif self.fenetre == 14:
                 pass
 
     def fill_listbox(self):
