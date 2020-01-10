@@ -15,8 +15,9 @@ roles = {"Loup Garou": True, "Loup Garou blanc": True, "Grand méchant loup": Fa
 class Game(object):
 
     player_list = []
+    ingame_roles = []
     player_roles = {}
-    game_info = {"Nuit": 1, "Couple": [], "Loups": [], "Enchantés": [], "Maitre": "NULL", "Modèle": "NULL", "Protected": "NULL", "Soeurs": [], "Maire": "NULL"}
+    game_info = {"Nuit": 1, "Couple": [], "Loups": [], "Enchantés": [], "Maitre": "NULL", "Modèle": "NULL", "Protected": "NULL", "Soeurs": [], "Maire": "NULL", "RenardFlair": True}
     game_options = {"VoyanteBavarde":False, "VoyanteBavardePer":0, "Couple":"Couple classique", "Taux LGB":1, "TauxAssassin":1, "SorcièreNoKill":False, "SorcièreNoRaise":False, "JDFenchant":1, "WinAnge":1, "CompoCachée":False, "Election":True}
 
     fenetre = 0
@@ -103,12 +104,14 @@ class Game(object):
         for r in roles.keys():
             if roles.get(r):
                 if "loup" in r or "Loup" in r:
-                    if r != "Chien loup":
+                    if r != "Chien loup" and r != "Loup amnésique":
                         roles_lg.append(r)
                     else:
                         roles_vi.append(r)
                 else:
                     roles_vi.append(r)
+            elif self.game_options.get("CompoCachée"):
+                self.ingame_roles.append(r)
 
         if len(roles_lg) < nb_wolf:
             while len(roles_lg) < nb_wolf:
@@ -128,6 +131,7 @@ class Game(object):
                 del roles_lg[roles_lg.index(role)]
                 self.player_roles[player] = role
                 self.game_info["Loups"].append(player)
+                self.ingame_roles.append(role)
                 nb_wolf -= 1
             else:
                 role = random.choice(roles_vi)
@@ -137,12 +141,16 @@ class Game(object):
                     player = random.choice(liste_joueurs)
                     del liste_joueurs[liste_joueurs.index(player)]
                     self.player_roles[player] = role
+                    self.ingame_roles.append(role)
+                    self.ingame_roles.append(role)
                 elif "Soeur" in role and len(liste_joueurs) == 0:
                     role = random.choice(roles_vi)
                     del roles_vi[roles_vi.index(role)]
                     self.player_roles[player] = role
+                    self.ingame_roles.append(role)
                 else:
                     self.player_roles[player] = role
+                    self.ingame_roles.append(role)
 
         # - Starting...
 
@@ -153,18 +161,23 @@ class Game(object):
             c.destroy()
 
         self.start = True
+        self.player_select = StringVar()
+        self.player_select.set("Personne")
         title = Label(self.window, text="Loup Garou", font=self.font_title, fg="red")
         self.text_info = Label(self.window, text="Merci de placer les joueurs de gauche à droite\nen fonction de l'ordre dont ils sont appelés pour les rôles.", font=self.font_desc)
         next_button = Button(self.window, text=">>", command=self.next)
+        player_selected = OptionMenu(self.window, self.player_select, "Personne", *self.player_list)
         self.alive_players = Listbox(self.window)
         self.fill_listbox()
 
         title.place(x=520, y=10)
         self.text_info.place(x=340, y=200)
-        next_button.place(x=450, y=500, width=300, height=30)
+        player_selected.place(x=450, y=500, width=300, height=40)
+        next_button.place(x=450, y=580, width=300, height=30)
         self.alive_players.place(x=50, y=200, width=260, height=300)
 
     def next(self):
+        global roles
         if self.start:
             if self.fenetre < len(self.player_list):
                 name = self.player_list[self.fenetre]
@@ -179,8 +192,134 @@ class Game(object):
             if self.fenetre == 0:
                 self.text_info.config(text="La nuit " + str(self.game_info.get("Nuit")) + " se lève !")
                 self.fenetre += 1
-            if self.fenetre == 1:
+            elif self.fenetre == 1:
+                if "Voleur" in self.ingame_roles:
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Voleur":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                    self.text_info.config(text="Le voleur se réveille ! (" + str(player) + ")\n\nIl va voler le rôle d'un joueur pour le reste de la partie.")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 2
+                    self.next()
+            elif self.fenetre == 2:
+                if self.player_select.get() != "Personne":
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Voleur":
+                            player = i
+                            break
+                    for i in range(0, len(self.player_list)):
+                        name = self.alive_players.get(i)
+                        nl = name.split(" - ")
+                        if player == nl[0]:
+                            self.alive_players.delete(i)
+                        if self.player_select.get() == nl[0]:
+                            self.alive_players.delete(i)
+                    if self.player_select.get() in self.game_info.get("Loups"):
+                        del self.game_info.get("Loups")[self.game_info.get("Loups").index(self.player_select.get())]
+                        self.game_info.get("Loups").append(player)
+                    self.player_roles[player] = self.player_roles.get(self.player_select.get())
+                    self.player_roles[self.player_select.get()] = "Voleur"
+                    self.alive_players.insert(END, str(self.player_select.get()) + " - Voleur")
+                    self.alive_players.insert(END, str(player) + " - " + str(self.player_roles.get(player)))
+                    self.player_select.set("Personne")
+                self.text_info.config(text="Le voleur se rendort !")
+                self.fenetre += 1
+            elif self.fenetre == 3:
+                if "Voyante" in self.ingame_roles:
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Voyante":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                    self.text_info.config(text="La voyante se réveille ! (" + str(player) + ")\n\nElle va regarder le rôle d'un joueur.")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 2
+                    self.next()
+            elif self.fenetre == 4:
+                if self.player_select.get() != "Personne":
+                    if self.game_options.get("VoyanteBavarde"):
+                        if random.randint(0, 100) <= self.game_options.get("VoyanteBavardePer"):
+                            self.text_info.config(text="La voyante est bavarde !\nElle a espionné un joueur qui est " + str(self.player_roles.get(self.player_select.get())) + " !\n\nLa voyante se rendort !")
+                        else:
+                            self.text_info.config(text="La voyante n'est pas bavarde.\nElle a espionné un joueur qui est " + str(self.player_roles.get(self.player_select.get())) + " !\n\nLa voyante se rendort !")
+                    else:
+                        self.text_info.config(text="La voyante a espionné un joueur qui est " + str(self.player_roles.get(self.player_select.get())) + " !\n\nLa voyante se rendort !")
+                    self.player_select.set("Personne")
+                else:
+                    self.text_info.config(text="La voyante se rendort !")
+                self.fenetre += 1
+            elif self.fenetre == 5:
+                if "Renard" in self.ingame_roles:
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Renard":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                    self.text_info.config(text="Le renard se réveille ! (" + str(player) + ")\n\nIl va flairer un joueur.")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 2
+                    self.next()
+            elif self.fenetre == 6:
+                if self.player_select.get() != "Personne":
+                    if self.player_select.get() in self.game_info.get("Loups"):
+                        self.game_info["RenardFlair"] = False
+                        self.text_info.config(text="Le renard perd son flair.\n\nLe renard se rendort !")
+                    else:
+                        self.text_info.config(text="Le renard garde son flair.\n\nLe renard se rendort !")
+                    self.player_select.set("Personne")
+                else:
+                    self.text_info.config(text="Le renard garde son flair.\n\nLe renard se rendort !")
+                self.fenetre += 1
+            elif self.fenetre == 7:
+                if "Cupidon" in self.ingame_roles:
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Cupidon":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                    self.text_info.config(text="Le cupidon se réveille ! (" + str(player) + ")\n\nIl va former un couple.")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 4
+                    self.next()
+            elif self.fenetre == 8:
+                if self.player_select.get() != "Personne":
+                    self.game_info.get("Couple").append(self.player_select.get())
+                    self.player_select.set("Personne")
+                    self.text_info.config(text="Le deuxième membre du couple...")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 3
+                    self.next()
+            elif self.fenetre == 9:
+                if self.player_select.get() != "Personne":
+                    self.game_info.get("Couple").append(self.player_select.get())
+                    self.player_select.set("Personne")
+                    self.text_info.config(text="Le cupidon se rendort !")
+                    self.fenetre += 1
+                else:
+                    self.fenetre -= 1
+                    self.next()
+            elif self.fenetre == 10:
+                self.text_info.config(text="Le couple se réveille ! (" + str(self.game_info.get("Couple")[0]) + " et " + str(self.game_info.get("Couple")[1]) + ")\n\nIls se regardent et se rendorment.")
+                self.fenetre += 1
+            elif self.fenetre == 11:
                 pass
+
 
     def fill_listbox(self):
         for i in self.player_list:
