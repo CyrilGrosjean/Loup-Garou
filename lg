@@ -17,7 +17,7 @@ class Game(object):
     player_list = []
     ingame_roles = []
     player_roles = {}
-    game_info = {"Nuit": 1, "Couple": [], "Loups": [], "Enchantés": [], "Maitre": "Personne", "Modèle": "Personne", "Protected": "Personne", "Soeurs": [], "Maire": "Personne", "RenardFlair": True}
+    game_info = {"Nuit": 1, "Couple": [], "Loups": [], "Enchantés": [], "Morts": [], "Maitre": "Personne", "Modèle": "Personne", "Protected": "Personne", "Soeurs": [], "Maire": "Personne", "RenardFlair": True, "AncienPower": True}
     game_options = {"VoyanteBavarde":False, "VoyanteBavardePer":0, "Couple":"Couple classique", "Taux LGB":1, "TauxAssassin":1, "SorcièreNoKill":False, "SorcièreNoRaise":False, "JDFenchant":1, "WinAnge":1, "CompoCachée":False, "Election":True}
 
     fenetre = 0
@@ -425,6 +425,39 @@ class Game(object):
                     self.fenetre += 1
                     self.next()
             elif self.fenetre == 22:
+                if "Salvateur" in self.ingame_roles:
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Salvateur":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                    self.text_info.config(text="Le salvateur se réveille ! (" + str(player) + ")\n\nIl va choisir quelqu'un qu'il va protéger cette nuit !")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 2
+                    self.next()
+            elif self.fenetre == 23:
+                if self.player_select.get() != "Personne":
+                    self.game_info["Protected"] = self.player_select.get()
+                self.text_info.config(text="Le salvateur se rendort...")
+                self.fenetre += 1
+            elif self.fenetre == 24:
+                self.text_info.config(text="Les loups garous se réveillent... (" + str(self.game_info.get("Loups")) + ")\n\nIls choisissent une victime pour cette nuit !")
+                self.fenetre += 1
+            elif self.fenetre == 25:
+                if self.player_select.get() == "Personne":
+                    self.fenetre = 24
+                    self.next()
+                else:
+                    if self.player_roles.get(self.player_select.get()) == "Ancien" and self.game_info.get("AncienPower"):
+                        self.game_info["AncienPower"] = False
+                    elif self.game_info.get("Protected") != self.player_select.get():
+                        self.game_info["Morts"].append(self.player_select.get())
+                    self.text_info.config(text="Les loups garous se rendorment...")
+                    self.fenetre += 1
+            elif self.fenetre == 26:
                 pass
 
     def fill_listbox(self):
