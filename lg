@@ -352,6 +352,79 @@ class Game(object):
                     self.fenetre += 2
                     self.next()
             elif self.fenetre == 14:
+                if self.player_select.get() != "Personne":
+                    self.game_info["Maitre"] = self.player_select.get()
+                self.player_select.set("Personne")
+                self.text_info.config(text="Le chien loup s'endort !")
+                self.fenetre += 1
+            elif self.fenetre == 15:
+                nb_enchants = int(self.game_options.get("JDFenchant"))
+                if "Joueur de flûte" in self.ingame_roles:
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Joueur de flûte":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                    self.text_info.config(text="Le joueur de flûte se réveille ! (" + str(player) + ")\n\nIl va enchanter " + str(nb_enchants) + " personnes. S'il enchante tout le monde,\nil gagne la partie.")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 6
+                    self.next()
+            elif self.fenetre == 16:
+                if self.player_select.get() != "Personne":
+                    self.game_info["Enchantés"].append(self.player_select.get())
+                    self.player_select.set("Personne")
+                    if self.game_options.get("JDFenchant") > 1:
+                        self.text_info.config(text="La deuxième personne à enchanter...")
+                        self.fenetre += 1
+                    else:
+                        self.text_info.config(text="Le joueur de flûte se rendort !")
+                        self.fenetre += 5
+                else:
+                    self.fenetre += 5
+                    self.next()
+            elif self.fenetre == 17:
+                self.game_info["Enchantés"].append(self.player_select.get())
+                self.player_select.set("Personne")
+                if self.game_options.get("JDFenchant") > 2:
+                    self.text_info.config(text="La troisième personne à enchanter...")
+                    self.fenetre += 1
+                else:
+                    self.text_info.config(text="Le joueur de flûte se rendort !")
+                    self.fenetre += 4
+            elif self.fenetre == 18:
+                self.game_info["Enchantés"].append(self.player_select.get())
+                self.player_select.set("Personne")
+                if self.game_options.get("JDFenchant") > 3:
+                    self.text_info.config(text="La quatrième personne à enchanter...")
+                    self.fenetre += 1
+                else:
+                    self.text_info.config(text="Le joueur de flûte se rendort !")
+                    self.fenetre += 3
+            elif self.fenetre == 19:
+                self.game_info["Enchantés"].append(self.player_select.get())
+                self.player_select.set("Personne")
+                if self.game_options.get("JDFenchant") > 4:
+                    self.text_info.config(text="La cinquième personne à enchanter...")
+                    self.fenetre += 1
+                else:
+                    self.text_info.config(text="Le joueur de flûte se rendort !")
+                    self.fenetre += 2
+            elif self.fenetre == 20:
+                self.game_info["Enchantés"].append(self.player_select.get())
+                self.player_select.set("Personne")
+                self.text_info.config(text="Le joueur de flûte se rendort !")
+                self.fenetre += 1
+            elif self.fenetre == 21:
+                if "Joueur de flûte" in self.ingame_roles:
+                    self.text_info.config(text="Les enchantés se réveillent...\n" + str(self.game_info.get("Enchantés")) + "\nIls regardent qui est enchanté puis se rendorment.")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 1
+                    self.next()
+            elif self.fenetre == 22:
                 pass
 
     def fill_listbox(self):
