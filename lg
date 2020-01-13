@@ -626,6 +626,7 @@ class Game(object):
                         player = "Personne"
                     if player not in self.game_info.get("Loups"):
                         self.text_info.config(text="Le chien loup a-t-il été nourri ?\n\nS'il n'est pas nourri, sélectionnez un joueur aléatoire.")
+                        self.fenetre += 1
                     else:
                         self.fenetre += 2
                         self.next()
