@@ -733,6 +733,21 @@ class Game(object):
         if role == "Joueur de flûte":
             self.game_info["Enchantés"] = []
 
+        if role == "Chevalier à l'épée rouillée":
+            index = self.player_list.index(player)
+            dead = ""
+            for i in range(index, len(self.player_list)):
+                if self.player_list[i] in self.game_info.get("Loups"):
+                    dead = self.player_list[i]
+                    break
+            if dead == "":
+                for i in range(0, index):
+                    if self.player_list[i] in self.game_info.get("Loups"):
+                        dead = self.player_list[i]
+                        break
+            text += "\nLe chevalier tue le premier loup à sa gauche.\nC'est donc " + dead + " qui meurt !"
+            self.game_info["Morts"].append(dead)
+
         self.text_info.config(text=str(text))
 
         del self.ingame_roles[self.ingame_roles.index(role)]
