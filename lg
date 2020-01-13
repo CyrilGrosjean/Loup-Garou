@@ -8,7 +8,7 @@ from tkinter.messagebox import *
 
 # -- GLOBAL VARIABLES -- #
 
-roles = {"Loup Garou": True, "Loup Garou blanc": True, "Grand méchant loup": False, "Infect père des loups": True, "Loup amnésique": True, "Simple villageois": True, "Voyante": True, "Chasseur": True, "Cupidon": True, "Sorcière": True, "Petite fille": True, "Voleur": True, "Salvateur": True, "Idiot du village": True, "Bouc émissaire": True, "Ancien": True, "Joueur de flûte": True, "Corbeau": True, "Enfant sauvage": True, "Renard": True, "Soeur": True, "Montreur d'ours": True, "Chien loup": True, "Chevalier à l'épée rouillée": True}
+roles = {"Loup Garou": True, "Loup Garou blanc": True, "Grand méchant loup": False, "Infect père des loups": True, "Loup amnésique": True, "Simple villageois": True, "Voyante": True, "Chasseur": True, "Cupidon": True, "Sorcière": True, "Petite fille": True, "Voleur": True, "Salvateur": True, "Idiot du village": True, "Bouc émissaire": True, "Ancien": True, "Joueur de flûte": True, "Corbeau": True, "Enfant sauvage": True, "Renard": True, "Soeur": True, "Montreur d'ours": True, "Chien loup": True, "Chevalier à l'épée rouillée": True, "Ange": True}
 
 # ---------------------- #
 
@@ -611,6 +611,85 @@ class Game(object):
                     self.kill_player()
                 else:
                     self.fenetre += 1
+            elif self.fenetre == 41:
+                self.check_win()
+                self.fenetre += 1
+                self.next()
+            elif self.fenetre == 42:
+                if "Chien loup" in self.ingame_roles:
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Chien loup":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                    if player not in self.game_info.get("Loups"):
+                        self.text_info.config(text="Le chien loup a-t-il été nourri ?\n\nS'il n'est pas nourri, sélectionnez un joueur aléatoire.")
+                    else:
+                        self.fenetre += 2
+                        self.next()
+                else:
+                    self.fenetre += 2
+                    self.next()
+            elif self.fenetre == 43:
+                if self.player_select.get() != "Personne":
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Chien loup":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                    if player != "Personne":
+                        self.game_info["Loups"].append(player)
+                    self.player_select.set("Personne")
+                    self.text_info.config(text="Le chien n'a pas été nourri, il devient alors Loup Garou !")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 1
+                    self.next()
+            elif self.fenetre == 44:
+                if self.game_info.get("Maire") == "Personne" and self.game_options.get("Election"):
+                    self.text_info.config(text="Il faut élire un maire !")
+                else:
+                    self.fenetre += 2
+                    self.next()
+            elif self.fenetre == 45:
+                if self.player_select.get() != "Personne":
+                    self.game_info["Maire"] = self.player_select.get()
+                    self.text_info.config(text="Le maire est donc " + str(self.player_select.get()) + " !")
+                    self.player_select.set("Personne")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 1
+                    self.next()
+            elif self.fenetre == 46:
+                pass
+
+    def check_win(self):
+        if len(self.game_info.get("Loups")) == 0:
+            self.text_info.config(text="Les villageois ont gagné !")
+        if len(self.player_list) == len(self.game_info.get("Loups")):
+            self.text_info.config(text="Les loups garous ont gagné !")
+        if len(self.player_list) == 1 and self.player_roles.get(self.player_list[0]) == "Assassin":
+            self.text_info.config(text="L'assassin a gagné !")
+        if len(self.player_list) == 1 and self.player_roles.get(self.player_list[0]) == "Loup Garou blanc":
+            self.text_info.config(text="Le loup garou blanc a gagné !")
+        if len(self.player_list) == 2:
+            if len(self.game_info.get("Couple")) == 2:
+                self.text_info.config(text="Le couple a gagné !")
+            if self.player_list[0] in self.game_info.get("Loups") and self.player_list[1] not in self.game_info.get("Loups"):
+                self.text_info.config(text="Les loups garous ont gagné !")
+            elif self.player_list[1] in self.game_info.get("Loups") and self.player_list[0] not in self.game_info.get("Loups"):
+                self.text_info.config(text="Les loups garous ont gagné !")
+        if len(self.player_list) == 3:
+            if len(self.game_info.get("Couple")) == 2:
+                if "Cupidon" in self.ingame_roles:
+                    if self.player_roles.get(self.game_info.get("Couple")[0]) != "Cupidon" and self.player_roles.get(self.game_info.get("Couple")[1]) != "Cupidon":
+                        self.text_info.config(text="Le couple a gagné !")
+        if len(self.player_list) == 0:
+            self.text_info.config(text="Personne n'a gagné, tout le monde est mort !")
 
     def kill_player(self):
         player = self.game_info.get("Morts")[0]
