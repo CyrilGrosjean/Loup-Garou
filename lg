@@ -91,6 +91,8 @@ class Game(object):
         roles_lg = []
         roles_vi = []
         liste_joueurs = self.player_list.copy()
+        liste_joueurs2 = self.player_list.copy()
+        self.player_list = []
 
         # Checking players
 
@@ -140,6 +142,7 @@ class Game(object):
                     self.player_roles[player] = role
                     self.game_info["Soeurs"].append(player)
                     player = random.choice(liste_joueurs)
+
                     self.game_info["Soeurs"].append(player)
                     del liste_joueurs[liste_joueurs.index(player)]
                     self.player_roles[player] = role
@@ -154,9 +157,14 @@ class Game(object):
                     self.player_roles[player] = role
                     self.ingame_roles.append(role)
 
+        while len(liste_joueurs2) > 0:
+            player = random.choice(liste_joueurs2)
+            del liste_joueurs2[liste_joueurs2.index(player)]
+            self.player_list.append(player)
+
         # - Starting...
 
-            self.launch()
+        self.launch()
 
     def launch(self):
         for c in self.window.winfo_children():
