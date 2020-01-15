@@ -396,7 +396,8 @@ class Game(object):
                     self.fenetre += 5
                     self.next()
             elif self.fenetre == 17:
-                self.game_info["Enchantés"].append(self.player_select.get())
+                if self.player_select.get() != "Personne":
+                    self.game_info["Enchantés"].append(self.player_select.get())
                 self.player_select.set("Personne")
                 if self.game_options.get("JDFenchant") > 2:
                     self.text_info.config(text="La troisième personne à enchanter...")
@@ -405,7 +406,8 @@ class Game(object):
                     self.text_info.config(text="Le joueur de flûte se rendort !")
                     self.fenetre += 4
             elif self.fenetre == 18:
-                self.game_info["Enchantés"].append(self.player_select.get())
+                if self.player_select.get() != "Personne":
+                    self.game_info["Enchantés"].append(self.player_select.get())
                 self.player_select.set("Personne")
                 if self.game_options.get("JDFenchant") > 3:
                     self.text_info.config(text="La quatrième personne à enchanter...")
@@ -414,7 +416,8 @@ class Game(object):
                     self.text_info.config(text="Le joueur de flûte se rendort !")
                     self.fenetre += 3
             elif self.fenetre == 19:
-                self.game_info["Enchantés"].append(self.player_select.get())
+                if self.player_select.get() != "Personne":
+                    self.game_info["Enchantés"].append(self.player_select.get())
                 self.player_select.set("Personne")
                 if self.game_options.get("JDFenchant") > 4:
                     self.text_info.config(text="La cinquième personne à enchanter...")
@@ -423,7 +426,8 @@ class Game(object):
                     self.text_info.config(text="Le joueur de flûte se rendort !")
                     self.fenetre += 2
             elif self.fenetre == 20:
-                self.game_info["Enchantés"].append(self.player_select.get())
+                if self.player_select.get() != "Personne":
+                    self.game_info["Enchantés"].append(self.player_select.get())
                 self.player_select.set("Personne")
                 self.text_info.config(text="Le joueur de flûte se rendort !")
                 self.fenetre += 1
@@ -654,8 +658,10 @@ class Game(object):
                         self.game_info["Loups"].append(player)
                     self.player_select.set("Personne")
                     self.text_info.config(text="Le chien n'a pas été nourri, il devient alors Loup Garou !")
+                    self.game_info["Maitre"] = "LG"
                     self.fenetre += 1
                 else:
+                    self.game_info["Maitre"] = "Personne"
                     self.fenetre += 1
                     self.next()
             elif self.fenetre == 44:
@@ -717,6 +723,7 @@ class Game(object):
                     self.fenetre += 1
                 else:
                     self.fenetre += 2
+                    self.next()
             elif self.fenetre == 50:
                 if self.player_select.get() != "Personne":
                     if self.game_options.get("VoyanteBavarde"):
@@ -731,6 +738,120 @@ class Game(object):
                     self.text_info.config(text="La voyante se rendort !")
                 self.fenetre += 1
             elif self.fenetre == 51:
+                if "Renard" in self.ingame_roles and self.game_info.get("RenardFlair"):
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Renard":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                    self.text_info.config(text="Le renard se réveille ! (" + str(player) + ")\n\nIl va flairer un joueur.")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 2
+                    self.next()
+            elif self.fenetre == 52:
+                if self.player_select.get() != "Personne":
+                    if self.player_select.get() in self.game_info.get("Loups"):
+                        self.game_info["RenardFlair"] = False
+                        self.text_info.config(text="Le renard perd son flair.\n\nLe renard se rendort !")
+                    else:
+                        self.text_info.config(text="Le renard garde son flair.\n\nLe renard se rendort !")
+                    self.player_select.set("Personne")
+                else:
+                    self.text_info.config(text="Le renard garde son flair.\n\nLe renard se rendort !")
+                self.fenetre += 1
+            elif self.fenetre == 53:
+                if "Chien loup" in self.ingame_roles and self.game_info.get("Maitre") == "Personne":
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Chien loup":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                else:
+                    self.fenetre += 2
+                    self.next()
+            elif self.fenetre == 54:
+                if self.player_select.get() != "Personne":
+                    self.game_info["Maitre"] = self.player_select.get()
+                self.player_select.set("Personne")
+                self.text_info.config(text="Le chien loup s'endort !")
+                self.fenetre += 1
+            elif self.fenetre == 55:
+                nb_enchants = int(self.game_options.get("JDFenchant"))
+                if "Joueur de flûte" in self.ingame_roles:
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Joueur de flûte":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                    self.text_info.config(text="Le joueur de flûte se réveille ! (" + str(player) + ")\n\nIl va enchanter " + str(nb_enchants) + " personnes. S'il enchante tout le monde,\nil gagne la partie.")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 6
+                    self.next()
+            elif self.fenetre == 56:
+                if self.player_select.get() != "Personne":
+                    self.game_info["Enchantés"].append(self.player_select.get())
+                    self.player_select.set("Personne")
+                    if self.game_options.get("JDFenchant") > 1:
+                        self.text_info.config(text="La deuxième personne à enchanter...")
+                        self.fenetre += 1
+                    else:
+                        self.text_info.config(text="Le joueur de flûte se rendort !")
+                        self.fenetre += 5
+                else:
+                    self.fenetre += 5
+                    self.next()
+            elif self.fenetre == 57:
+                if self.player_select.get() != "Personne":
+                    self.game_info["Enchantés"].append(self.player_select.get())
+                self.player_select.set("Personne")
+                if self.game_options.get("JDFenchant") > 2:
+                    self.text_info.config(text="La troisième personne à enchanter...")
+                    self.fenetre += 1
+                else:
+                    self.text_info.config(text="Le joueur de flûte se rendort !")
+                    self.fenetre += 4
+            elif self.fenetre == 58:
+                if self.player_select.get() != "Personne":
+                    self.game_info["Enchantés"].append(self.player_select.get())
+                self.player_select.set("Personne")
+                if self.game_options.get("JDFenchant") > 3:
+                    self.text_info.config(text="La quatrième personne à enchanter...")
+                    self.fenetre += 1
+                else:
+                    self.text_info.config(text="Le joueur de flûte se rendort !")
+                    self.fenetre += 3
+            elif self.fenetre == 59:
+                if self.player_select.get() != "Personne":
+                    self.game_info["Enchantés"].append(self.player_select.get())
+                self.player_select.set("Personne")
+                if self.game_options.get("JDFenchant") > 4:
+                    self.text_info.config(text="La cinquième personne à enchanter...")
+                    self.fenetre += 1
+                else:
+                    self.text_info.config(text="Le joueur de flûte se rendort !")
+                    self.fenetre += 2
+            elif self.fenetre == 60:
+                if self.player_select.get() != "Personne":
+                    self.game_info["Enchantés"].append(self.player_select.get())
+                self.player_select.set("Personne")
+                self.text_info.config(text="Le joueur de flûte se rendort !")
+                self.fenetre += 1
+            elif self.fenetre == 61:
+                if "Joueur de flûte" in self.ingame_roles:
+                    self.text_info.config(text="Les enchantés se réveillent ! (" + str(self.game_info.get("Enchantés")) + ")\n\nIls se regardent et se rendorment !")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 1
+                    self.next()
+            elif self.fenetre == 62:
                 pass
 
     def check_win(self):
