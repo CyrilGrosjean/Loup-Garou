@@ -568,7 +568,7 @@ class Game(object):
                     self.fenetre += 1
                     self.next()
             elif self.fenetre == 35:
-                if "Sorcière" in self.ingame_roles and self.game_options.get("SorcièreNoRaise"):
+                if "Sorcière" in self.ingame_roles and not self.game_options.get("SorcièreNoRaise"):
                     player = ""
                     for i in self.player_roles.keys():
                         if self.player_roles.get(i) == "Sorcière":
@@ -589,7 +589,7 @@ class Game(object):
                 self.text_info.config("La sorcière se rendort (sauf si elle a sa potion de mort)...")
                 self.fenetre += 1
             elif self.fenetre == 37:
-                if "Sorcière" in self.ingame_roles and self.game_options.get("SorcièreNoKill"):
+                if "Sorcière" in self.ingame_roles and not self.game_options.get("SorcièreNoKill"):
                     player = ""
                     for i in self.player_roles.keys():
                         if self.player_roles.get(i) == "Sorcière":
@@ -623,6 +623,7 @@ class Game(object):
                     self.kill_player()
                 else:
                     self.fenetre += 1
+                    self.next()
             elif self.fenetre == 41:
                 self.check_win()
                 self.fenetre += 1
@@ -667,6 +668,7 @@ class Game(object):
             elif self.fenetre == 44:
                 if self.game_info.get("Maire") == "Personne" and self.game_options.get("Election"):
                     self.text_info.config(text="Il faut élire un maire !")
+                    self.fenetre += 1
                 else:
                     self.fenetre += 2
                     self.next()
@@ -685,22 +687,24 @@ class Game(object):
             elif self.fenetre == 47:
                 if self.chasseur:
                     self.chasseur = False
-                    if self.player_select.get() != "Personne":
-                        if self.player_roles.get(self.player_select.get()) != "Idiot du village":
-                            self.game_info["Morts"].append(self.player_select.get())
-                    else:
-                        if "Bouc émissaire" in self.ingame_roles:
-                            player = ""
-                            for i in self.player_roles.keys():
-                                if self.player_roles.get(i) == "Bouc émissaire":
-                                    player = i
-                                    self.game_info["Morts"].append(player)
-                                    self.text_info.config(text="Le village ne s'est pas mis d'accord lors du vote.\nLe bouc émissaire est donc tué !")
-                                    break
-                            if player == "":
-                                self.text_info.config(text="Le village ne s'est pas mis d'accord lors du vote.\nPersonne est mort !")
-                        else:
+                    self.game_info["Morts"].append(self.player_select.get())
+                    self.player_select.set("Personne")
+                if self.player_select.get() != "Personne":
+                    if self.player_roles.get(self.player_select.get()) != "Idiot du village":
+                        self.game_info["Morts"].append(self.player_select.get())
+                else:
+                    if "Bouc émissaire" in self.ingame_roles:
+                        player = ""
+                        for i in self.player_roles.keys():
+                            if self.player_roles.get(i) == "Bouc émissaire":
+                                player = i
+                                self.game_info["Morts"].append(player)
+                                self.text_info.config(text="Le village ne s'est pas mis d'accord lors du vote.\nLe bouc émissaire est donc tué !")
+                                break
+                        if player == "":
                             self.text_info.config(text="Le village ne s'est pas mis d'accord lors du vote.\nPersonne est mort !")
+                    else:
+                        self.text_info.config(text="Le village ne s'est pas mis d'accord lors du vote.\nPersonne est mort !")
                 self.player_select.set("Personne")
                 if len(self.game_info.get("Morts")) > 0:
                     self.kill_player()
@@ -852,7 +856,179 @@ class Game(object):
                     self.fenetre += 1
                     self.next()
             elif self.fenetre == 62:
-                pass
+                if "Salvateur" in self.ingame_roles:
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Salvateur":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                    self.text_info.config(text="Le salvateur se réveille ! (" + str(player) + ")\n\nIl va protéger quelqu'un cette nuit.")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 2
+                    self.next()
+            elif self.fenetre == 63:
+                if self.player_select.get() != "Personne":
+                    self.game_info["Protected"] = self.player_select.get()
+                self.player_select.set("Personne")
+                self.text_info.config(text="Le salvateur se rendort...")
+                self.fenetre += 1
+            elif self.fenetre == 64:
+                self.text_info.config(text="Les loups garous se réveillent ! (" + str(self.game_info.get("Loups")) + ")\n\nIls désignent une victime pour cette nuit !")
+                self.fenetre += 1
+            elif self.fenetre == 65:
+                if self.player_select.get() == "Personne":
+                    self.fenetre = 64
+                    self.next()
+                else:
+                    if self.player_roles.get(self.player_select.get()) == "Ancien" and self.game_info.get("AncienPower"):
+                        self.game_info["AncienPower"] = False
+                    elif self.game_info.get("Protected") != self.player_select.get():
+                        self.game_info["Morts"].append(self.player_select.get())
+                    self.player_select.set("Personne")
+                    self.text_info.config(text="Les loups garous se rendorment...")
+                    self.fenetre += 1
+            elif self.fenetre == 66:
+                if "Infect père des loups" in self.ingame_roles and self.game_info.get("InfectPower"):
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Infect père des loups":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                    self.text_info.config(text="L'infect père des loups se réveille ! (" + str(player) + ")\n\nIl décide alors si il souhaite ou non réssuciter la personne \nmorte pendant l'attaque des loups.\n\nMessage pour le M-J: Sélectionnez un joueur \ndans la liste pour réssuciter le mort.")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 2
+                    self.next()
+            elif self.fenetre == 67:
+                if self.player_select.get() != "Personne":
+                    self.game_info["InfectPower"] = False
+                    self.game_info["Loups"].append(self.game_info.get("Morts")[0])
+                    del self.game_info.get("Morts")[0]
+                    self.player_select.set("Personne")
+                    self.text_info.config(text="L'infect père des loups se rendort...")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 2
+                    self.next()
+            elif self.fenetre == 68:
+                if "Grand méchant loup" in self.ingame_roles and self.game_info.get("GMLPower"):
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Grand méchant loup":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                    self.text_info.config(text="Le grand méchant loup se réveille ! (" + str(player) + ")\n\nIl va désigner une seconde victime dans la nuit.")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 2
+                    self.next()
+            elif self.fenetre == 69:
+                if self.player_select.get() != "Personne":
+                    if self.player_roles.get(self.player_select.get()) == "Ancien" and self.game_info.get("AncienPower"):
+                        self.game_info["AncienPower"] = False
+                    elif self.game_info.get("Protected") != self.player_select.get():
+                        self.game_info["Morts"].append(self.player_select.get())
+                self.player_select.set("Personne")
+                self.text_info.config(text="Le grand méchant loup se rendort...")
+                self.fenetre += 1
+            elif self.fenetre == 70:
+                if "Loup Garou blanc" in self.ingame_roles and self.game_info.get("Nuit") % self.game_options.get("Taux LGB") == 0:
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Loup Garou blanc":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                    self.text_info.config(text="Le loup garou blanc se réveille ! (" + str(player) + ")\n\nIl va tuer ou non un loup garou cette nuit.")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 2
+                    self.next()
+            elif self.fenetre == 71:
+                if self.player_select.get() != "Personne":
+                    if self.game_info.get("Protected") != self.player_select.get():
+                        self.game_info["Morts"].append(self.player_select.get())
+                self.player_select.set("Personne")
+                self.text_info.config(text="Le loup garou blanc se rendort...")
+                self.fenetre += 1
+            elif self.fenetre == 72:
+                if "Assassin" in self.ingame_roles and self.game_info.get("Nuit") % self.game_options.get("TauxAssassin") == 0:
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Assassin":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                    self.text_info.config(text="L'assassin se réveille ! (" + str(player) + ")\n\nIl va tuer quelqu'un cette nuit !")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 2
+                    self.next()
+            elif self.fenetre == 73:
+                if self.player_select.get() != "Personne":
+                    if self.game_info.get("Protected") != self.player_select.get():
+                        self.game_info["Morts"].append(self.player_select.get())
+                self.player_select.set("Personne")
+                self.text_info.config(text="L'assassin se rendort...")
+                self.fenetre += 1
+            elif self.fenetre == 74:
+                if "Soeur" in self.ingame_roles:
+                    self.text_info.config(text="Les soeurs se réveillent ! (" + str(self.game_info.get("Soeurs")) + ")\n\nElles se mettent d'accord pour le jour suivant et se rendorment.")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 1
+                    self.next()
+            elif self.fenetre == 75:
+                if "Sorcière" in self.ingame_roles and self.game_info.get("SorcièrePotions")[0]:
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Sorcière":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                    self.text_info.config(text="La sorcière se réveille ! (" + str(player) + ")\n\nElle va sauver une personne si elle le souhaite.")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 2
+                    self.next()
+            elif self.fenetre == 76:
+                if self.player_select.get() != "Personne":
+                    self.game_info["SorcièrePotions"][0] = False
+                    del self.game_info["Morts"][self.game_info.index(self.player_select.get())]
+                self.player_select.set("Personne")
+                self.text_info.config("La sorcière se rendort (sauf si elle a sa potion de mort)...")
+                self.fenetre += 1
+            elif self.fenetre == 77:
+                if "Sorcière" in self.ingame_roles and self.game_info.get("SorcièrePotions")[1]:
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Sorcière":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                    self.text_info.config(text="(La sorcière se réveille (" + str(player) + "))\n\nElle va tuer une personne si elle le souhaite.")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 2
+                    self.next()
+            elif self.fenetre == 78:
+                if self.player_select.get() != "Personne":
+                    self.game_info["Morts"].append(self.player_select.get())
+                    self.game_info["SorcièrePotions"][1] = False
+                self.player_select.set("Personne")
+                self.text_info.config(text="La sorcière se rendort !")
+                self.fenetre = 39
 
     def check_win(self):
         if len(self.game_info.get("Loups")) == 0:
