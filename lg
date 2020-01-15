@@ -697,6 +697,32 @@ class Game(object):
                 self.text_info.config(text="La nuit " + str(self.game_info.get("Nuit")) + " se lève !")
                 self.fenetre += 1
             elif self.fenetre == 49:
+                if "Voyante" in self.ingame_roles:
+                    player = ""
+                    for i in self.player_roles.keys():
+                        if self.player_roles.get(i) == "Voyante":
+                            player = i
+                            break
+                    if player == "":
+                        player = "Personne"
+                    self.text_info.config(text="La voyante se réveille ! (" + str(player) + ")\n\nElle va espionner un joueur cette nuit.")
+                    self.fenetre += 1
+                else:
+                    self.fenetre += 2
+            elif self.fenetre == 50:
+                if self.player_select.get() != "Personne":
+                    if self.game_options.get("VoyanteBavarde"):
+                        if random.randint(0, 100) <= self.game_options.get("VoyanteBavardePer"):
+                            self.text_info.config(text="La voyante est bavarde !\nElle a espionné un joueur qui est " + str(self.player_roles.get(self.player_select.get())) + " !\n\nLa voyante se rendort !")
+                        else:
+                            self.text_info.config(text="La voyante n'est pas bavarde.\nElle a espionné un joueur qui est " + str(self.player_roles.get(self.player_select.get())) + " !\n\nLa voyante se rendort !")
+                    else:
+                        self.text_info.config(text="La voyante a espionné un joueur qui est " + str(self.player_roles.get(self.player_select.get())) + " !\n\nLa voyante se rendort !")
+                    self.player_select.set("Personne")
+                else:
+                    self.text_info.config(text="La voyante se rendort !")
+                self.fenetre += 1
+            elif self.fenetre == 51:
                 pass
 
     def check_win(self):
