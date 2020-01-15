@@ -43,6 +43,10 @@ Tout est automatisé et permet au maître du jeu une aide supplémentaire avec d
 Le programme place aléatoirement les joueurs dans la salle (cela permet que le montreur d'ours grogne correctement et que le chevalier à l'épée rouillée tue le bon loup garou)
 Le programme détecte le camp gagnant et termine le jeu automatiquement.
 
+# Bugs connus
+- La liste de sélection du maitre du jeu n'est pas actualisée lorsqu'il y a un mort.
+- Un mort supplémentaire lors de la phase des morts (dû au couple ou encore au chasseur) n'est pas supprimé dans la liste des joueurs en vie
+
 # Idées d'ajout futur
 - Possibilité d'avoir des configurations préfaites
 - Possibilité d'enregistrer et charger ses propres configurations

@@ -1066,7 +1066,6 @@ class Game(object):
     def kill_player(self):
         player = self.game_info.get("Morts")[0]
         role = self.player_roles.get(player)
-        del self.game_info["Morts"][0]
         text = player + " est mort, il était " + role + "."
 
         if player in self.game_info.get("Loups"):
@@ -1125,6 +1124,7 @@ class Game(object):
         del self.ingame_roles[self.ingame_roles.index(role)]
         del self.player_roles[player]
         del self.player_list[self.player_list.index(player)]
+        del self.game_info["Morts"][0]
         for i in range(0, len(self.player_list)):
             name = self.alive_players.get(i)
             nl = name.split(" - ")
