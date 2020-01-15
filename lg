@@ -647,7 +647,7 @@ class Game(object):
                     self.fenetre += 2
                     self.next()
             elif self.fenetre == 43:
-                if self.player_select.get() != "Personne":
+                if self.player_select.get() == "Personne":
                     player = ""
                     for i in self.player_roles.keys():
                         if self.player_roles.get(i) == "Chien loup":
@@ -687,8 +687,9 @@ class Game(object):
             elif self.fenetre == 47:
                 if self.chasseur:
                     self.chasseur = False
-                    self.game_info["Morts"].append(self.player_select.get())
-                    self.player_select.set("Personne")
+                    if self.player_select.get() != "Personne":
+                        self.game_info["Morts"].append(self.player_select.get())
+                        self.player_select.set("Personne")
                 if self.player_select.get() != "Personne":
                     if self.player_roles.get(self.player_select.get()) != "Idiot du village":
                         self.game_info["Morts"].append(self.player_select.get())
