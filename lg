@@ -666,6 +666,37 @@ class Game(object):
                     self.fenetre += 1
                     self.next()
             elif self.fenetre == 46:
+                self.text_info.config(text="C'est l'heure du vote ! Votez pour un joueur.")
+                self.fenetre += 1
+            elif self.fenetre == 47:
+                if self.chasseur:
+                    self.chasseur = False
+                    if self.player_select.get() != "Personne":
+                        if self.player_roles.get(self.player_select.get()) != "Idiot du village":
+                            self.game_info["Morts"].append(self.player_select.get())
+                    else:
+                        if "Bouc émissaire" in self.ingame_roles:
+                            player = ""
+                            for i in self.player_roles.keys():
+                                if self.player_roles.get(i) == "Bouc émissaire":
+                                    player = i
+                                    self.game_info["Morts"].append(player)
+                                    self.text_info.config(text="Le village ne s'est pas mis d'accord lors du vote.\nLe bouc émissaire est donc tué !")
+                                    break
+                            if player == "":
+                                self.text_info.config(text="Le village ne s'est pas mis d'accord lors du vote.\nPersonne est mort !")
+                        else:
+                            self.text_info.config(text="Le village ne s'est pas mis d'accord lors du vote.\nPersonne est mort !")
+                self.player_select.set("Personne")
+                if len(self.game_info.get("Morts")) > 0:
+                    self.kill_player()
+                else:
+                    self.fenetre += 1
+            elif self.fenetre == 48:
+                self.game_info["Nuit"] += 1
+                self.text_info.config(text="La nuit " + str(self.game_info.get("Nuit")) + " se lève !")
+                self.fenetre += 1
+            elif self.fenetre == 49:
                 pass
 
     def check_win(self):
