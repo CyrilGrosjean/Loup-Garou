@@ -688,6 +688,9 @@ class Game(object):
                 if self.player_select.get() != "Personne":
                     if self.player_roles.get(self.player_select.get()) != "Idiot du village":
                         self.game_info["Morts"].append(self.player_select.get())
+                    self.player_select.set("Personne")
+                    self.fenetre += 1
+                    self.next()
                 else:
                     if "Bouc émissaire" in self.ingame_roles:
                         player = ""
@@ -701,8 +704,7 @@ class Game(object):
                             self.text_info.config(text="Le village ne s'est pas mis d'accord lors du vote.\nPersonne est mort !")
                     else:
                         self.text_info.config(text="Le village ne s'est pas mis d'accord lors du vote.\nPersonne est mort !")
-                self.player_select.set("Personne")
-                self.fenetre += 1
+                    self.fenetre += 1
             elif self.fenetre == 48:
                 if self.chasseur:
                     self.chasseur = False
@@ -1000,7 +1002,7 @@ class Game(object):
                             break
                     if player == "":
                         player = "Personne"
-                    self.text_info.config(text="La sorcière se réveille ! (" + str(player) + ")\n\nElle va sauver une personne si elle le souhaite (" + str(self.game_info.get("Morts")) + ")."")
+                    self.text_info.config(text="La sorcière se réveille ! (" + str(player) + ")\n\nElle va sauver une personne si elle le souhaite (" + str(self.game_info.get("Morts")) + ").")
                     self.fenetre += 1
                 else:
                     self.fenetre += 2
