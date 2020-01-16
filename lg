@@ -586,7 +586,7 @@ class Game(object):
                     self.game_info["SorcièrePotions"][0] = False
                     del self.game_info["Morts"][self.game_info["Morts"].index(self.player_select.get())]
                 self.player_select.set("Personne")
-                self.text_info.config("La sorcière se rendort (sauf si elle a sa potion de mort)...")
+                self.text_info.config(text="La sorcière se rendort (sauf si elle a sa potion de mort)...")
                 self.fenetre += 1
             elif self.fenetre == 37:
                 if "Sorcière" in self.ingame_roles and not self.game_options.get("SorcièreNoKill"):
@@ -1012,7 +1012,7 @@ class Game(object):
                     self.game_info["SorcièrePotions"][0] = False
                     del self.game_info["Morts"][self.game_info["Morts"].index(self.player_select.get())]
                 self.player_select.set("Personne")
-                self.text_info.config("La sorcière se rendort (sauf si elle a sa potion de mort)...")
+                self.text_info.config(text="La sorcière se rendort (sauf si elle a sa potion de mort)...")
                 self.fenetre += 1
             elif self.fenetre == 78:
                 if "Sorcière" in self.ingame_roles and self.game_info.get("SorcièrePotions")[1]:
@@ -1038,30 +1038,44 @@ class Game(object):
             elif self.fenetre == 80:
                 self.fenetre = 39
                 self.next()
+            elif self.fenetre == 81:
+                self.fenetre += 1
+            elif self.fenetre == 82:
+                self.fenetre = 0
+                self.main_menu()
 
     def check_win(self):
         if len(self.game_info.get("Loups")) == 0:
             self.text_info.config(text="Les villageois ont gagné !")
+            self.fenetre = 81
         if len(self.player_list) == len(self.game_info.get("Loups")):
             self.text_info.config(text="Les loups garous ont gagné !")
+            self.fenetre = 81
         if len(self.player_list) == 1 and self.player_roles.get(self.player_list[0]) == "Assassin":
             self.text_info.config(text="L'assassin a gagné !")
+            self.fenetre = 81
         if len(self.player_list) == 1 and self.player_roles.get(self.player_list[0]) == "Loup Garou blanc":
             self.text_info.config(text="Le loup garou blanc a gagné !")
+            self.fenetre = 81
         if len(self.player_list) == 2:
             if len(self.game_info.get("Couple")) == 2:
                 self.text_info.config(text="Le couple a gagné !")
+                self.fenetre = 81
             if self.player_list[0] in self.game_info.get("Loups") and self.player_list[1] not in self.game_info.get("Loups"):
                 self.text_info.config(text="Les loups garous ont gagné !")
+                self.fenetre = 81
             elif self.player_list[1] in self.game_info.get("Loups") and self.player_list[0] not in self.game_info.get("Loups"):
                 self.text_info.config(text="Les loups garous ont gagné !")
+                self.fenetre = 81
         if len(self.player_list) == 3:
             if len(self.game_info.get("Couple")) == 2:
                 if "Cupidon" in self.ingame_roles:
                     if self.player_roles.get(self.game_info.get("Couple")[0]) != "Cupidon" and self.player_roles.get(self.game_info.get("Couple")[1]) != "Cupidon":
                         self.text_info.config(text="Le couple a gagné !")
+                        self.fenetre = 81
         if len(self.player_list) == 0:
             self.text_info.config(text="Personne n'a gagné, tout le monde est mort !")
+            self.fenetre = 81
 
     def kill_player(self):
         player = self.game_info.get("Morts")[0]
