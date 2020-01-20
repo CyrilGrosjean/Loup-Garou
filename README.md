@@ -44,10 +44,7 @@ Le programme place aléatoirement les joueurs dans la salle (cela permet que le 
 Le programme détecte le camp gagnant et termine le jeu automatiquement.
 
 # Bugs connus
-- La liste de sélection du maitre du jeu n'est pas actualisée lorsqu'il y a un mort.
-- Un mort supplémentaire lors de la phase des morts (dû au couple ou encore au chasseur) n'est pas supprimé dans la liste des joueurs en vie
-- L'option du couple dans les paramètres n'est pas fonctionnel
-- Le rôle du corbeau n'est pas fonctionnel
+Voir la buglist
 
 # Idées d'ajout futur
 - Possibilité d'avoir des configurations préfaites
