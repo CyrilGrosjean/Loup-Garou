@@ -176,13 +176,13 @@ class Game(object):
         title = Label(self.window, text="Loup Garou", font=self.font_title, fg="red")
         self.text_info = Label(self.window, text="Merci de placer les joueurs de gauche à droite\nen fonction de l'ordre dont ils sont appelés pour les rôles.", font=self.font_desc)
         next_button = Button(self.window, text=">>", command=self.next)
-        player_selected = OptionMenu(self.window, self.player_select, "Personne", *self.player_list)
+        self.player_selected = OptionMenu(self.window, self.player_select, "Personne", *self.player_list)
         self.alive_players = Listbox(self.window)
         self.fill_listbox()
 
         title.place(x=520, y=10)
         self.text_info.place(x=340, y=200)
-        player_selected.place(x=450, y=500, width=300, height=40)
+        self.player_selected.place(x=450, y=500, width=300, height=40)
         next_button.place(x=450, y=580, width=300, height=30)
         self.alive_players.place(x=50, y=200, width=260, height=300)
 
@@ -625,6 +625,9 @@ class Game(object):
                     self.fenetre += 1
                     self.next()
             elif self.fenetre == 41:
+                self.player_selected.destroy()
+                self.player_selected = OptionMenu(self.window, self.player_select, "Personne", *self.player_list)
+                self.player_selected.place(x=450, y=500, width=300, height=40)
                 self.check_win()
                 self.fenetre += 1
                 self.next()
@@ -717,6 +720,9 @@ class Game(object):
                     self.fenetre += 1
                     self.next()
             elif self.fenetre == 49:
+                self.player_selected.destroy()
+                self.player_selected = OptionMenu(self.window, self.player_select, "Personne", *self.player_list)
+                self.player_selected.place(x=450, y=500, width=300, height=40)
                 self.check_win()
                 self.fenetre += 1
                 self.next()
