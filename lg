@@ -717,10 +717,14 @@ class Game(object):
                     self.fenetre += 1
                     self.next()
             elif self.fenetre == 49:
+                self.check_win()
+                self.fenetre += 1
+                self.next()
+            elif self.fenetre == 50:
                 self.game_info["Nuit"] += 1
                 self.text_info.config(text="La nuit " + str(self.game_info.get("Nuit")) + " se lève !")
                 self.fenetre += 1
-            elif self.fenetre == 50:
+            elif self.fenetre == 51:
                 if "Voyante" in self.ingame_roles:
                     player = ""
                     for i in self.player_roles.keys():
@@ -734,7 +738,7 @@ class Game(object):
                 else:
                     self.fenetre += 2
                     self.next()
-            elif self.fenetre == 51:
+            elif self.fenetre == 52:
                 if self.player_select.get() != "Personne":
                     if self.game_options.get("VoyanteBavarde"):
                         if random.randint(0, 100) <= self.game_options.get("VoyanteBavardePer"):
@@ -747,7 +751,7 @@ class Game(object):
                 else:
                     self.text_info.config(text="La voyante se rendort !")
                 self.fenetre += 1
-            elif self.fenetre == 52:
+            elif self.fenetre == 53:
                 if "Renard" in self.ingame_roles and self.game_info.get("RenardFlair"):
                     player = ""
                     for i in self.player_roles.keys():
@@ -761,7 +765,7 @@ class Game(object):
                 else:
                     self.fenetre += 2
                     self.next()
-            elif self.fenetre == 53:
+            elif self.fenetre == 54:
                 if self.player_select.get() != "Personne":
                     if self.player_select.get() in self.game_info.get("Loups"):
                         self.game_info["RenardFlair"] = False
@@ -772,7 +776,7 @@ class Game(object):
                 else:
                     self.text_info.config(text="Le renard garde son flair.\n\nLe renard se rendort !")
                 self.fenetre += 1
-            elif self.fenetre == 54:
+            elif self.fenetre == 55:
                 if "Chien loup" in self.ingame_roles and self.game_info.get("Maitre") == "Personne":
                     player = ""
                     for i in self.player_roles.keys():
@@ -784,13 +788,13 @@ class Game(object):
                 else:
                     self.fenetre += 2
                     self.next()
-            elif self.fenetre == 55:
+            elif self.fenetre == 56:
                 if self.player_select.get() != "Personne":
                     self.game_info["Maitre"] = self.player_select.get()
                 self.player_select.set("Personne")
                 self.text_info.config(text="Le chien loup s'endort !")
                 self.fenetre += 1
-            elif self.fenetre == 56:
+            elif self.fenetre == 57:
                 nb_enchants = int(self.game_options.get("JDFenchant"))
                 if "Joueur de flûte" in self.ingame_roles:
                     player = ""
@@ -805,7 +809,7 @@ class Game(object):
                 else:
                     self.fenetre += 6
                     self.next()
-            elif self.fenetre == 57:
+            elif self.fenetre == 58:
                 if self.player_select.get() != "Personne":
                     self.game_info["Enchantés"].append(self.player_select.get())
                     self.player_select.set("Personne")
@@ -818,7 +822,7 @@ class Game(object):
                 else:
                     self.fenetre += 5
                     self.next()
-            elif self.fenetre == 58:
+            elif self.fenetre == 59:
                 if self.player_select.get() != "Personne":
                     self.game_info["Enchantés"].append(self.player_select.get())
                 self.player_select.set("Personne")
@@ -828,7 +832,7 @@ class Game(object):
                 else:
                     self.text_info.config(text="Le joueur de flûte se rendort !")
                     self.fenetre += 4
-            elif self.fenetre == 59:
+            elif self.fenetre == 60:
                 if self.player_select.get() != "Personne":
                     self.game_info["Enchantés"].append(self.player_select.get())
                 self.player_select.set("Personne")
@@ -838,7 +842,7 @@ class Game(object):
                 else:
                     self.text_info.config(text="Le joueur de flûte se rendort !")
                     self.fenetre += 3
-            elif self.fenetre == 60:
+            elif self.fenetre == 61:
                 if self.player_select.get() != "Personne":
                     self.game_info["Enchantés"].append(self.player_select.get())
                 self.player_select.set("Personne")
@@ -848,20 +852,20 @@ class Game(object):
                 else:
                     self.text_info.config(text="Le joueur de flûte se rendort !")
                     self.fenetre += 2
-            elif self.fenetre == 61:
+            elif self.fenetre == 62:
                 if self.player_select.get() != "Personne":
                     self.game_info["Enchantés"].append(self.player_select.get())
                 self.player_select.set("Personne")
                 self.text_info.config(text="Le joueur de flûte se rendort !")
                 self.fenetre += 1
-            elif self.fenetre == 62:
+            elif self.fenetre == 63:
                 if "Joueur de flûte" in self.ingame_roles:
                     self.text_info.config(text="Les enchantés se réveillent ! (" + str(self.game_info.get("Enchantés")) + ")\n\nIls se regardent et se rendorment !")
                     self.fenetre += 1
                 else:
                     self.fenetre += 1
                     self.next()
-            elif self.fenetre == 63:
+            elif self.fenetre == 64:
                 if "Salvateur" in self.ingame_roles:
                     player = ""
                     for i in self.player_roles.keys():
@@ -875,18 +879,18 @@ class Game(object):
                 else:
                     self.fenetre += 2
                     self.next()
-            elif self.fenetre == 64:
+            elif self.fenetre == 65:
                 if self.player_select.get() != "Personne":
                     self.game_info["Protected"] = self.player_select.get()
                 self.player_select.set("Personne")
                 self.text_info.config(text="Le salvateur se rendort...")
                 self.fenetre += 1
-            elif self.fenetre == 65:
+            elif self.fenetre == 66:
                 self.text_info.config(text="Les loups garous se réveillent ! (" + str(self.game_info.get("Loups")) + ")\n\nIls désignent une victime pour cette nuit !")
                 self.fenetre += 1
-            elif self.fenetre == 66:
+            elif self.fenetre == 67:
                 if self.player_select.get() == "Personne":
-                    self.fenetre = 65
+                    self.fenetre = 66
                     self.next()
                 else:
                     if self.player_roles.get(self.player_select.get()) == "Ancien" and self.game_info.get("AncienPower"):
@@ -896,7 +900,7 @@ class Game(object):
                     self.player_select.set("Personne")
                     self.text_info.config(text="Les loups garous se rendorment...")
                     self.fenetre += 1
-            elif self.fenetre == 67:
+            elif self.fenetre == 68:
                 if "Infect père des loups" in self.ingame_roles and self.game_info.get("InfectPower"):
                     player = ""
                     for i in self.player_roles.keys():
@@ -910,7 +914,7 @@ class Game(object):
                 else:
                     self.fenetre += 2
                     self.next()
-            elif self.fenetre == 68:
+            elif self.fenetre == 69:
                 if self.player_select.get() != "Personne":
                     self.game_info["InfectPower"] = False
                     self.game_info["Loups"].append(self.game_info.get("Morts")[0])
@@ -921,7 +925,7 @@ class Game(object):
                 else:
                     self.fenetre += 2
                     self.next()
-            elif self.fenetre == 69:
+            elif self.fenetre == 70:
                 if "Grand méchant loup" in self.ingame_roles and self.game_info.get("GMLPower"):
                     player = ""
                     for i in self.player_roles.keys():
@@ -935,7 +939,7 @@ class Game(object):
                 else:
                     self.fenetre += 2
                     self.next()
-            elif self.fenetre == 70:
+            elif self.fenetre == 71:
                 if self.player_select.get() != "Personne":
                     if self.player_roles.get(self.player_select.get()) == "Ancien" and self.game_info.get("AncienPower"):
                         self.game_info["AncienPower"] = False
@@ -944,7 +948,7 @@ class Game(object):
                 self.player_select.set("Personne")
                 self.text_info.config(text="Le grand méchant loup se rendort...")
                 self.fenetre += 1
-            elif self.fenetre == 71:
+            elif self.fenetre == 72:
                 if "Loup Garou blanc" in self.ingame_roles and self.game_info.get("Nuit") % self.game_options.get("Taux LGB") == 0:
                     player = ""
                     for i in self.player_roles.keys():
@@ -958,14 +962,14 @@ class Game(object):
                 else:
                     self.fenetre += 2
                     self.next()
-            elif self.fenetre == 72:
+            elif self.fenetre == 73:
                 if self.player_select.get() != "Personne":
                     if self.game_info.get("Protected") != self.player_select.get():
                         self.game_info["Morts"].append(self.player_select.get())
                 self.player_select.set("Personne")
                 self.text_info.config(text="Le loup garou blanc se rendort...")
                 self.fenetre += 1
-            elif self.fenetre == 73:
+            elif self.fenetre == 74:
                 if "Assassin" in self.ingame_roles and self.game_info.get("Nuit") % self.game_options.get("TauxAssassin") == 0:
                     player = ""
                     for i in self.player_roles.keys():
@@ -979,21 +983,21 @@ class Game(object):
                 else:
                     self.fenetre += 2
                     self.next()
-            elif self.fenetre == 74:
+            elif self.fenetre == 75:
                 if self.player_select.get() != "Personne":
                     if self.game_info.get("Protected") != self.player_select.get():
                         self.game_info["Morts"].append(self.player_select.get())
                 self.player_select.set("Personne")
                 self.text_info.config(text="L'assassin se rendort...")
                 self.fenetre += 1
-            elif self.fenetre == 75:
+            elif self.fenetre == 76:
                 if "Soeur" in self.ingame_roles:
                     self.text_info.config(text="Les soeurs se réveillent ! (" + str(self.game_info.get("Soeurs")) + ")\n\nElles se mettent d'accord pour le jour suivant et se rendorment.")
                     self.fenetre += 1
                 else:
                     self.fenetre += 1
                     self.next()
-            elif self.fenetre == 76:
+            elif self.fenetre == 77:
                 if "Sorcière" in self.ingame_roles and self.game_info.get("SorcièrePotions")[0]:
                     player = ""
                     for i in self.player_roles.keys():
@@ -1007,14 +1011,14 @@ class Game(object):
                 else:
                     self.fenetre += 2
                     self.next()
-            elif self.fenetre == 77:
+            elif self.fenetre == 78:
                 if self.player_select.get() != "Personne":
                     self.game_info["SorcièrePotions"][0] = False
                     del self.game_info["Morts"][self.game_info["Morts"].index(self.player_select.get())]
                 self.player_select.set("Personne")
                 self.text_info.config(text="La sorcière se rendort (sauf si elle a sa potion de mort)...")
                 self.fenetre += 1
-            elif self.fenetre == 78:
+            elif self.fenetre == 79:
                 if "Sorcière" in self.ingame_roles and self.game_info.get("SorcièrePotions")[1]:
                     player = ""
                     for i in self.player_roles.keys():
@@ -1028,19 +1032,19 @@ class Game(object):
                 else:
                     self.fenetre += 2
                     self.next()
-            elif self.fenetre == 79:
+            elif self.fenetre == 80:
                 if self.player_select.get() != "Personne":
                     self.game_info["Morts"].append(self.player_select.get())
                     self.game_info["SorcièrePotions"][1] = False
                 self.player_select.set("Personne")
                 self.text_info.config(text="La sorcière se rendort !")
                 self.fenetre = 39
-            elif self.fenetre == 80:
+            elif self.fenetre == 81:
                 self.fenetre = 39
                 self.next()
-            elif self.fenetre == 81:
-                self.fenetre += 1
             elif self.fenetre == 82:
+                self.fenetre += 1
+            elif self.fenetre == 83:
                 self.fenetre = 0
                 self.main_menu()
 
@@ -1078,8 +1082,10 @@ class Game(object):
             self.fenetre = 81
 
     def kill_player(self):
+        listbox_text = ""
         player = self.game_info.get("Morts")[0]
         role = self.player_roles.get(player)
+        listbox_text += player + " - " + role
         text = player + " est mort, il était " + role + "."
 
         if player in self.game_info.get("Loups"):
@@ -1139,11 +1145,8 @@ class Game(object):
         del self.player_roles[player]
         del self.player_list[self.player_list.index(player)]
         del self.game_info["Morts"][0]
-        for i in range(0, len(self.player_list)):
-            name = self.alive_players.get(i)
-            nl = name.split(" - ")
-            if player == nl[0]:
-                self.alive_players.delete(i)
+        idx = self.alive_players.get(0, END).index(listbox_text)
+        self.alive_players.delete(idx)
 
     def fill_listbox(self):
         for i in self.player_list:
