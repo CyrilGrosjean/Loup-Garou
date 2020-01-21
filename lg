@@ -262,7 +262,7 @@ class Game(object):
                     self.fenetre += 2
                     self.next()
             elif self.fenetre == 4:
-                text = reveil_roles.voyante(self.player_roles, self.game_options, self.player_select.get())
+                text, self.game_info = reveil_roles.voyante(self.player_roles, self.game_options, self.player_select.get())
                 self.text_info.config(text=text)
                 self.player_select.set("Personne")
                 self.fenetre += 1
@@ -334,10 +334,9 @@ class Game(object):
                     self.fenetre += 2
                     self.next()
             elif self.fenetre == 12:
-                if self.player_select.get() != "Personne":
-                    self.game_info["Modèle"] = self.player_select.get()
+                text, self.game_info = reveil_roles.enfant_sauvage(self.game_info, self.player_select.get())
+                self.text_info.config(text=text)
                 self.player_select.set("Personne")
-                self.text_info.config(text="L'enfant sauvage se rendort !")
                 self.fenetre += 1
             elif self.fenetre == 13:
                 if "Chien loup" in self.ingame_roles:

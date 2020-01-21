@@ -1,6 +1,6 @@
 import random
 
-def voyante(player_roles, options, selected):
+def voyante(game_info, player_roles, options, selected):
     if selected != "Personne":
         role = player_roles.get(selected)
         if options.get("VoyanteBavarde"):
@@ -12,7 +12,7 @@ def voyante(player_roles, options, selected):
             text = "La voyante a espionné un joueur qui est " + str(role) + " !\n\nLa voyante se rendort."
     else:
         text = "La voyante se rendort."
-    return text
+    return text, game_info
 
 def renard(game_info, selected):
     if selected != "Personne":
@@ -34,4 +34,10 @@ def cupidon(game_info, selected):
         game_info["Couple"].append(selected)
     else:
         text = "Le cupidon se rendort."
+    return text, game_info
+
+def enfant_sauvage(game_info, selected):
+    if selected != "Personne":
+        game_info["Modèle"] = selected
+    text = "L'enfant sauvage se rendort."
     return text, game_info
