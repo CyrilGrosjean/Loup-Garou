@@ -5,11 +5,14 @@ from tkinter import *
 import pygame
 from tkinter.font import *
 from tkinter.messagebox import *
-import reveil_roles
+import action_roles
 
 # -- GLOBAL VARIABLES -- #
 
 roles = {"Loup Garou": True, "Loup Garou blanc": True, "Grand méchant loup": False, "Infect père des loups": True, "Loup amnésique": True, "Simple villageois": True, "Voyante": True, "Chasseur": True, "Cupidon": True, "Sorcière": True, "Petite fille": True, "Voleur": True, "Salvateur": True, "Idiot du village": True, "Bouc émissaire": True, "Ancien": True, "Joueur de flûte": True, "Corbeau": True, "Enfant sauvage": True, "Renard": True, "Soeur": True, "Montreur d'ours": True, "Chien loup": True, "Chevalier à l'épée rouillée": True, "Ange": True}
+
+role_order = ["All", "Voleur", "Voleur", "Voyante", "Voyante", "Renard", "Renard", "Cupidon", "Cupidon", "Cupidon", "All", "Enfant sauvage", "Enfant sauvage", "Chien loup", "Chien loup", "Joueur de flûte", "Joueur de flûte", "Joueur de flûte", "Joueur de flûte", "Joueur de flûte", "Joueur de flûte", "Joueur de flûte", "Salvateur", "Salvateur", "Loups", "Loups", "Infect père des loups", "Infect père des loups", "Grand méchant loup", "Grand méchant loup", "Loup Garou blanc", "Loup Garou blanc", "Assassin", "Assassin", "Soeur", "Sorcière", "Sorcière", "Sorcière", "Sorcière", "All", "All", "All", "All", "Chien loup", "Chien loup", "All", "All", "All", "All", "All", "All", "All", "Voyante", "Voyante", "Renard", "Renard", "Chien loup", "Chien loup", "Joueur de flûte", "Joueur de flûte", "Joueur de flûte", "Joueur de flûte", "Joueur de flûte", "Joueur de flûte", "Joueur de flûte", "Salvateur", "Salvateur", "Loups", "Loups", "Infect père des loups", "Infect père des loups", "Grand méchant loup", "Grand méchant loup", "Loup Garou blanc", "Loup Garou blanc", "Assassin", "Assassin", "Soeur", "Sorcière", "Sorcière", "Sorcière", "Sorcière", "All", "All", "All"]
+functions_order = []
 
 # ---------------------- #
 
@@ -353,10 +356,9 @@ class Game(object):
                     self.fenetre += 2
                     self.next()
             elif self.fenetre == 14:
-                if self.player_select.get() != "Personne":
-                    self.game_info["Maitre"] = self.player_select.get()
+                text, self.game_info = reveil_roles.chien_loup(self.game_info, self.player_select.get())
+                self.text_info.config(text=text)
                 self.player_select.set("Personne")
-                self.text_info.config(text="Le chien loup s'endort !")
                 self.fenetre += 1
             elif self.fenetre == 15:
                 nb_enchants = int(self.game_options.get("JDFenchant"))

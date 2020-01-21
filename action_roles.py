@@ -41,3 +41,9 @@ def enfant_sauvage(game_info, selected):
         game_info["Modèle"] = selected
     text = "L'enfant sauvage se rendort."
     return text, game_info
+
+def chien_loup(game_info, selected):
+    if selected != "Personne":
+        game_info["Maitre"] = selected
+    text = "Le chien loup se rendort."
+    return text, game_info
