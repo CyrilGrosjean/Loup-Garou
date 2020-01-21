@@ -301,18 +301,17 @@ class Game(object):
                     self.next()
             elif self.fenetre == 8:
                 if self.player_select.get() != "Personne":
-                    self.game_info.get("Couple").append(self.player_select.get())
+                    text, self.game_info = reveil_roles.cupidon(self.game_info, self.player_select.get())
+                    self.text_info.config(text=text)
                     self.player_select.set("Personne")
-                    self.text_info.config(text="Le deuxième membre du couple...")
                     self.fenetre += 1
                 else:
                     self.fenetre += 3
                     self.next()
             elif self.fenetre == 9:
                 if self.player_select.get() != "Personne":
-                    self.game_info.get("Couple").append(self.player_select.get())
+                    text, self.game_info = reveil_roles.cupidon(self.game_info, self.player_select.get())
                     self.player_select.set("Personne")
-                    self.text_info.config(text="Le cupidon se rendort !")
                     self.fenetre += 1
                 else:
                     self.fenetre -= 1

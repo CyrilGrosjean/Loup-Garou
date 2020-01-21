@@ -24,3 +24,14 @@ def renard(game_info, selected):
     else:
         text = "Le renard garde son flair.\n\nLe renard se rendort."
     return text, game_info
+
+def cupidon(game_info, selected):
+    if selected != "Personne":
+        if len(game_info.get("Couple")) == 1:
+            text = "Le cupidon se rendort."
+        else:
+            text = "Le deuxième membre du couple..."
+        game_info["Couple"].append(selected)
+    else:
+        text = "Le cupidon se rendort."
+    return text, game_info
