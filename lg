@@ -162,6 +162,11 @@ class Game(object):
             del liste_joueurs2[liste_joueurs2.index(player)]
             self.player_list.append(player)
 
+        for i in roles_lg:
+            self.ingame_roles.append(i)
+        for i in roles_vi:
+            self.ingame_roles.append(i)
+
         # - Starting...
 
         self.launch()
