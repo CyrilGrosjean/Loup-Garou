@@ -47,6 +47,7 @@ Le programme détecte le camp gagnant et termine le jeu automatiquement.
 Voir la buglist
 
 # Idées d'ajout futur
+- Musiques d'ambiance
 - Possibilité d'avoir des configurations préfaites
 - Possibilité d'enregistrer et charger ses propres configurations
 - Ajouter de nouveaux rôles
