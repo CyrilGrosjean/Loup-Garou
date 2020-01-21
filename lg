@@ -1052,7 +1052,28 @@ class Game(object):
                 self.fenetre += 1
             elif self.fenetre == 83:
                 self.fenetre = 0
-                self.main_menu()
+                self.reset_var()
+
+    def reset_var(self):
+        self.game_info["Nuit"] = 1
+        self.game_info["Couple"].clear()
+        self.game_info["Loups"].clear()
+        self.game_info["Enchantés"].clear()
+        self.game_info["Maitre"] = "Personne"
+        self.game_info["Modèle"] = "Personne"
+        self.game_info["Protected"] = "Personne"
+        self.game_info["Soeurs"].clear()
+        self.game_info["Maire"] = "Personne"
+        self.game_info["RenardFlair"] = True
+        self.game_info["AncienPower"] = True
+        self.game_info["InfectPower"] = True
+        self.game_info["SorcièrePotions"] = [True, True]
+        self.game_info["GMLPower"] = True
+        self.player_list.clear()
+        self.ingame_roles.clear()
+        self.player_roles = {}
+        self.fenetre = 0
+        self.main_menu()
 
     def check_win(self):
         if len(self.game_info.get("Loups")) == 0:
@@ -1095,6 +1116,15 @@ class Game(object):
         text = player + " est mort, il était " + role + "."
 
         if player in self.game_info.get("Loups"):
+            if "Loup amnésique" in self.ingame_roles:
+                player = ""
+                for i in self.player_roles.keys():
+                    if self.player_roles.get(i) == "Loup amnésique":
+                        player = i
+                if player != "":
+                    self.game_info["Loups"].append(player)
+            if "Grand méchant loup" in self.ingame_roles and self.game_info.get("GMLPower"):
+                self.game_info["GMLPower"] = False
             del self.game_info["Loups"][self.game_info["Loups"].index(player)]
 
         if player in self.game_info.get("Couple"):
@@ -1409,6 +1439,5 @@ class Game(object):
             self.toggle_label.config(text="Activé", fg="green")
         else:
             self.toggle_label.config(text="Désactivé", fg="red")
-
 
 Game()
