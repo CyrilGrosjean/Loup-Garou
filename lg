@@ -5,6 +5,7 @@ from tkinter import *
 import pygame
 from tkinter.font import *
 from tkinter.messagebox import *
+import reveil_roles
 
 # -- GLOBAL VARIABLES -- #
 
@@ -261,17 +262,8 @@ class Game(object):
                     self.fenetre += 2
                     self.next()
             elif self.fenetre == 4:
-                if self.player_select.get() != "Personne":
-                    if self.game_options.get("VoyanteBavarde"):
-                        if random.randint(0, 100) <= self.game_options.get("VoyanteBavardePer"):
-                            self.text_info.config(text="La voyante est bavarde !\nElle a espionné un joueur qui est " + str(self.player_roles.get(self.player_select.get())) + " !\n\nLa voyante se rendort !")
-                        else:
-                            self.text_info.config(text="La voyante n'est pas bavarde.\nElle a espionné un joueur qui est " + str(self.player_roles.get(self.player_select.get())) + " !\n\nLa voyante se rendort !")
-                    else:
-                        self.text_info.config(text="La voyante a espionné un joueur qui est " + str(self.player_roles.get(self.player_select.get())) + " !\n\nLa voyante se rendort !")
-                    self.player_select.set("Personne")
-                else:
-                    self.text_info.config(text="La voyante se rendort !")
+                text = reveil_roles.voyante(self.player_roles, self.game_options, self.player_select.get())
+                self.text_info.config(text=text)
                 self.fenetre += 1
             elif self.fenetre == 5:
                 if "Renard" in self.ingame_roles:
