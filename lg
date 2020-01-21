@@ -264,6 +264,7 @@ class Game(object):
             elif self.fenetre == 4:
                 text = reveil_roles.voyante(self.player_roles, self.game_options, self.player_select.get())
                 self.text_info.config(text=text)
+                self.player_select.set("Personne")
                 self.fenetre += 1
             elif self.fenetre == 5:
                 if "Renard" in self.ingame_roles:
@@ -280,15 +281,9 @@ class Game(object):
                     self.fenetre += 2
                     self.next()
             elif self.fenetre == 6:
-                if self.player_select.get() != "Personne":
-                    if self.player_select.get() in self.game_info.get("Loups"):
-                        self.game_info["RenardFlair"] = False
-                        self.text_info.config(text="Le renard perd son flair.\n\nLe renard se rendort !")
-                    else:
-                        self.text_info.config(text="Le renard garde son flair.\n\nLe renard se rendort !")
-                    self.player_select.set("Personne")
-                else:
-                    self.text_info.config(text="Le renard garde son flair.\n\nLe renard se rendort !")
+                text, self.game_info = reveil_roles.renard(self.game_info, self.player_select.get())
+                self.text_info.config(text=text)
+                self.player_select.set("Personne")
                 self.fenetre += 1
             elif self.fenetre == 7:
                 if "Cupidon" in self.ingame_roles:
