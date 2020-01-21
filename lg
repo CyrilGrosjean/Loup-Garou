@@ -162,10 +162,11 @@ class Game(object):
             del liste_joueurs2[liste_joueurs2.index(player)]
             self.player_list.append(player)
 
-        for i in roles_lg:
-            self.ingame_roles.append(i)
-        for i in roles_vi:
-            self.ingame_roles.append(i)
+        if self.game_options.get("CompoCachée"):
+            for i in roles_lg:
+                self.ingame_roles.append(i)
+            for i in roles_vi:
+                self.ingame_roles.append(i)
 
         # - Starting...
 
@@ -589,7 +590,7 @@ class Game(object):
             elif self.fenetre == 36:
                 if self.player_select.get() != "Personne":
                     self.game_info["SorcièrePotions"][0] = False
-                    del self.game_info["Morts"][self.game_info["Morts"].index(self.player_select.get())]
+                    del self.game_info.get("Morts")[self.game_info["Morts"].index(self.player_select.get())]
                 self.player_select.set("Personne")
                 self.text_info.config(text="La sorcière se rendort (sauf si elle a sa potion de mort)...")
                 self.fenetre += 1
@@ -1025,7 +1026,7 @@ class Game(object):
             elif self.fenetre == 78:
                 if self.player_select.get() != "Personne":
                     self.game_info["SorcièrePotions"][0] = False
-                    del self.game_info["Morts"][self.game_info["Morts"].index(self.player_select.get())]
+                    del self.game_info.get("Morts")[self.game_info["Morts"].index(self.player_select.get())]
                 self.player_select.set("Personne")
                 self.text_info.config(text="La sorcière se rendort (sauf si elle a sa potion de mort)...")
                 self.fenetre += 1
@@ -1061,9 +1062,9 @@ class Game(object):
 
     def reset_var(self):
         self.game_info["Nuit"] = 1
-        self.game_info["Couple"].clear()
-        self.game_info["Loups"].clear()
-        self.game_info["Enchantés"].clear()
+        self.game_info["Couple"] = []
+        self.game_info["Loups"] = []
+        self.game_info["Enchantés"] = []
         self.game_info["Maitre"] = "Personne"
         self.game_info["Modèle"] = "Personne"
         self.game_info["Protected"] = "Personne"
@@ -1074,8 +1075,8 @@ class Game(object):
         self.game_info["InfectPower"] = True
         self.game_info["SorcièrePotions"] = [True, True]
         self.game_info["GMLPower"] = True
-        self.player_list.clear()
-        self.ingame_roles.clear()
+        self.player_list = []
+        self.ingame_roles = []
         self.player_roles = {}
         self.fenetre = 0
         self.main_menu()
